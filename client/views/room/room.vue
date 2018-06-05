@@ -76,7 +76,7 @@ export default {
             },
             set() {
                 let tempList = this.roomUserList.some(x => {
-                    
+
                 })
             }
         },
@@ -90,44 +90,44 @@ export default {
 
 <style>
 .room-margin-top {
-    margin-top: 50px;
+  margin-top: 50px;
 }
 
 .room-list {
-    padding-left: 20px;
-    font-size: 12px;
-    font-weight: bolder;
-    overflow: hidden;
+  padding-left: 20px;
+  font-size: 12px;
+  font-weight: bolder;
+  overflow: hidden;
 }
 
 .room-list li {
-    margin: 10px;
-    list-style-image: none;
-    list-style-type: none;
-    background-color: #999999;
-    border-right-width: 0px;
-    border-right-style: solid;
-    border-right-color: #000000;
-    float: left;
-    width: 70px;
-    height: 45px;
-    box-shadow: 0px 5px 5px #000000;
+  margin: 10px;
+  list-style-image: none;
+  list-style-type: none;
+  background-color: #999999;
+  border-right-width: 0px;
+  border-right-style: solid;
+  border-right-color: #000000;
+  float: left;
+  width: 70px;
+  height: 45px;
+  box-shadow: 0px 5px 5px #000000;
 }
 
 .room-list li a {
-    color: #ffffff;
-    text-decoration: none;
-    margin: 0px;
-    display: block;
-    text-align: center;
-    line-height: 45px;
+  color: #ffffff;
+  text-decoration: none;
+  margin: 0px;
+  display: block;
+  text-align: center;
+  line-height: 45px;
 }
 
 .room-list li a:hover {
-    background-color: #0099cc;
+  background-color: #0099cc;
 }
 
 .room-startGame-button {
-    margin-top: 20px;
+  margin-top: 20px;
 }
 </style>
