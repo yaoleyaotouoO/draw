@@ -13,15 +13,16 @@ export default {
     setRoomId(state, roomId) {
         state.roomId = roomId;
     },
-    addRoomUser(state, userIds) {
-        if (userIds instanceof Array) {
-            userIds = userIds.filter(x => state.roomUserList.indexOf(x) === -1);
-            state.roomUserList.push(...userIds);
+    addRoomUser(state, users) {
+        if (users instanceof Array) {
+            let userIds = state.roomUserList.map(x => x.userId);
+            users = users.filter(x => userIds.indexOf(x.userId) === -1);
+            state.roomUserList.push(...users);
             return;
         }
 
-        if (state.roomUserList.indexOf(userIds) > -1) return;
-        state.roomUserList.push(userIds);
+        if (state.roomUserList.indexOf(users) > -1) return;
+        state.roomUserList.push(users);
     },
     deleteRoomUser(state) {
         state.roomUserList = [];

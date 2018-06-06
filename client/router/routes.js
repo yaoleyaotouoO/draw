@@ -19,10 +19,11 @@ export default [
     },
     {
         name: 'room',
-        path: '/room/:id',
+        path: '/room/:roomId',
         component: Room
     },
     {
+        name:'game',
         path: '/game',
         component: Game
     }

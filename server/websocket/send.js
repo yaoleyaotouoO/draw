@@ -32,7 +32,14 @@ module.exports = async (wss, ws, message) => {
             broadcast(wss, JSON.stringify({
                 data: messageData.data,
                 type: 'addRoomUser'
-            }))
+            }));
+
+            break;
+        case 'startGame':
+            broadcast(wss, JSON.stringify({
+                data: messageData.data,
+                type: 'startGame'
+            }));
             break;
         default:
             console.warn('websocket not send message type');

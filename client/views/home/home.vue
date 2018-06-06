@@ -40,6 +40,7 @@ export default {
             this.$webSocket.send(JSON.stringify({
                 data: {
                     userId: Number(localStorage.getItem('userId')),
+                    userName: localStorage.getItem('userName'),
                     roomId: roomId
                 },
                 type: 'addRoomUser'
@@ -47,7 +48,7 @@ export default {
 
             this.$store.commit('setRoomId', roomId);
             this.$store.commit('deleteRoomUser');
-            this.$router.push({ name: 'room', params: { id: roomId } });
+            this.$router.push({ name: 'room', params: { roomId: roomId } });
         }
     },
     computed: {

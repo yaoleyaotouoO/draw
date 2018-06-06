@@ -1,6 +1,6 @@
 <template>
     <div>
-        <mt-header fixed :title="userName + '的房间'">
+        <mt-header fixed :title="myUserName + '的房间'">
             <router-link to="/home" slot="left">
                 <mt-button icon="back">返回</mt-button>
             </router-link>
@@ -9,7 +9,7 @@
         <div class="room-margin-top">
             <ul class="room-list">
                 <li v-for="item in showUserList" :key="item.seatId">
-                    <a href="javascript: void(0)" @click="handleSitDown(item.seatId)">{{ item.name }}</a>
+                    <a href="javascript: void(0)">{{ item.userName }}</a>
                 </li>
             </ul>
 
@@ -26,59 +26,39 @@ import { mapState } from 'vuex';
 export default {
     data() {
         return {
-            userName: localStorage.getItem('userName'),
-            defaultUserList: [],
+            myUserName: localStorage.getItem('userName')
         }
     },
     async mounted() {
-        for (let i = 1; i <= 8; i++) {
-            this.defaultUserList.push({
-                seatId: i,
-                name: i,
-                userId: null
-            })
-        }
-
-        let users = await api.getRoomUserList(this.$route.params.id);
+        let users = await api.getRoomUserList(this.$route.params.roomId);
         this.$store.commit('addRoomUser', users);
     },
     methods: {
-        handleSitDown(seatId) {
-            this.defaultUserList.map(x => {
-                if (x.name === this.userName) {
-                    x.name = x.seatId;
-                    x.userId = null;
-                }
-            })
-
-            this.defaultUserList.map(x => {
-                if (x.seatId === seatId) {
-                    x.name = this.userName;
-                    x.userId = localStorage.getItem('userId');
-                }
-
-                return x;
-            })
-        },
         startGame() {
-            console.log("this.roomId: ", this.roomId);
-            console.log("roomUserList: ", this.roomUserList);
-            // this.$router.push(`/game/${this.roomId}`);
+            this.$webSocket.send(JSON.stringify({
+                data: {
+                    roomId: this.roomId
+                },
+                type: 'startGame'
+            }));
+
+        //    this.$router.push({ name: 'game', params: { roomId: this.roomId } });
         }
     },
     computed: {
         canStartGame() {
-            return this.defaultUserList.some(x => (x.userId === localStorage.getItem('userId') && x.seatId === 1));
+            return this.showUserList.some(x => (x.userId === Number(localStorage.getItem('userId')) && x.seatId === 0));
         },
-        showUserList: {
-            get() {
-                return this.defaultUserList;
-            },
-            set() {
-                let tempList = this.roomUserList.some(x => {
+        showUserList() {
+            return [0, 0, 0, 0, 0, 0, 0, 0].map((_, i) => {
+                let data = {
+                    seatId: i,
+                    userName: this.roomUserList[i] ? this.roomUserList[i].userName : null,
+                    userId: this.roomUserList[i] ? this.roomUserList[i].userId : null,
+                }
 
-                })
-            }
+                return data;
+            });
         },
         ...mapState({
             roomUserList: state => state.roomUserList,
@@ -90,44 +70,44 @@ export default {
 
 <style>
 .room-margin-top {
-  margin-top: 50px;
+    margin-top: 50px;
 }
 
 .room-list {
-  padding-left: 20px;
-  font-size: 12px;
-  font-weight: bolder;
-  overflow: hidden;
+    padding-left: 20px;
+    font-size: 12px;
+    font-weight: bolder;
+    overflow: hidden;
 }
 
 .room-list li {
-  margin: 10px;
-  list-style-image: none;
-  list-style-type: none;
-  background-color: #999999;
-  border-right-width: 0px;
-  border-right-style: solid;
-  border-right-color: #000000;
-  float: left;
-  width: 70px;
-  height: 45px;
-  box-shadow: 0px 5px 5px #000000;
+    margin: 10px;
+    list-style-image: none;
+    list-style-type: none;
+    background-color: #999999;
+    border-right-width: 0px;
+    border-right-style: solid;
+    border-right-color: #000000;
+    float: left;
+    width: 70px;
+    height: 45px;
+    box-shadow: 0px 5px 5px #000000;
 }
 
 .room-list li a {
-  color: #ffffff;
-  text-decoration: none;
-  margin: 0px;
-  display: block;
-  text-align: center;
-  line-height: 45px;
+    color: #ffffff;
+    text-decoration: none;
+    margin: 0px;
+    display: block;
+    text-align: center;
+    line-height: 45px;
 }
 
 .room-list li a:hover {
-  background-color: #0099cc;
+    background-color: #0099cc;
 }
 
 .room-startGame-button {
-  margin-top: 20px;
+    margin-top: 20px;
 }
 </style>

@@ -29,11 +29,20 @@ router.beforeEach((to, from, next) => {
                     if (data.data.roomId === store.state.roomId) {
                         store.commit('addRoomUser', {
                             userId: data.data.userId,
-                            userName: localStorage.getItem('userName')
+                            userName: data.data.userName
                         });
                     }
                     break;
+                case 'startGame':
+                    if (data.data.roomId === store.state.roomId) {
+                        console.log("data.data.roomId: ", data.data.roomId);
+                        next({ path: '/game', query: { roomId: data.data.roomId } })
+                        //    router.replace({ name: 'game', params: { roomId: data.data.roomId } })
+                    }
+                    
+                    break;
                 default:
+                    console.log("datatype: ", data.type);
                     console.warn('webSocket onmessage not type!');
             }
         }
