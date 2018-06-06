@@ -29,6 +29,10 @@ export default {
         console.log("this.$route: ", this.$route);
         console.log("roomId: ", this.roomId);
         let users = await api.getRoomUserList(this.roomId);
+        if (users[0].userId === Number(localStorage.getItem('userId')) 
+            && users[0].userName === localStorage.getItem('userName')) {
+            this.canDraw = true;
+        }
         console.log("users: ", users);
     }
 }
@@ -36,8 +40,8 @@ export default {
 
 <style>
 .game-spacing {
-    margin-top: 4px;
-    margin-bottom: 4px;
-    float: left;
+  margin-top: 4px;
+  margin-bottom: 4px;
+  float: left;
 }
 </style>

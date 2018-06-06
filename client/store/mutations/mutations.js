@@ -26,5 +26,8 @@ export default {
     },
     deleteRoomUser(state) {
         state.roomUserList = [];
+    },
+    drawPicture(state, data) {
+        state.drawPictureData = data;
     }
 }

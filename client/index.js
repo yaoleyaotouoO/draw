@@ -17,7 +17,7 @@ const store = createStore();
 
 router.beforeEach((to, from, next) => {
     if (!Vue.prototype.$webSocket) {
-        const webSocket = new WebSocket('ws://localhost:3333/ws/');
+        const webSocket = new WebSocket('ws://192.168.0.103:3333/ws/');
         webSocket.onmessage = (event) => {
             console.log("webSocket onmessage: ", event.data);
             var data = JSON.parse(event.data);
@@ -35,11 +35,17 @@ router.beforeEach((to, from, next) => {
                     break;
                 case 'startGame':
                     if (data.data.roomId === store.state.roomId) {
-                        console.log("data.data.roomId: ", data.data.roomId);
                         next({ path: '/game', query: { roomId: data.data.roomId } })
                         //    router.replace({ name: 'game', params: { roomId: data.data.roomId } })
                     }
-                    
+
+                    break;
+                case 'drawPicture':
+                    if (data.data.roomId === store.state.roomId) {
+                        console.log('data: ', data.data);
+                        store.commit('drawPicture', data.data);
+                    }
+
                     break;
                 default:
                     console.log("datatype: ", data.type);

@@ -25,7 +25,6 @@ module.exports = async (wss, ws, message) => {
                 type: 'addRoom'
             }));
 
-            console.log(`createRoom data ${JSON.stringify(data)}`);
             break;
         case 'addRoomUser':
             data = await webSocketController.addRoomUser(messageData.data);
@@ -40,6 +39,14 @@ module.exports = async (wss, ws, message) => {
                 data: messageData.data,
                 type: 'startGame'
             }));
+
+            break;
+        case 'drawPicture':
+            broadcast(wss, JSON.stringify({
+                data: messageData.data,
+                type: 'drawPicture'
+            }));
+
             break;
         default:
             console.warn('websocket not send message type');

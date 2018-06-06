@@ -1,11 +1,15 @@
 <template>
     <div>
-        <canvas ref='canvasDom' width='400' height='300' style='border: 1px solid #999;' @touchstart='start' @touchmove='move' @touchend='end'>
+        <canvas v-if="canDraw" ref='canvasDom' width='400' height='300' style='border: 1px solid #999;' @touchstart='start' @touchmove='move' @touchend='end'>
+        </canvas>
+        <canvas v-else ref='canvasDom' width='400' height='300' style='border: 1px solid #999;'>
         </canvas>
     </div>
 </template>
 
 <script>
+import { mapState } from 'vuex';
+
 export default {
     props: {
         roomId: Number,
@@ -30,9 +34,9 @@ export default {
     },
     methods: {
         draw(data) {
-            console.log('draw roomId: ', this.roomId);
-            console.log('draw canDraw: ', this.canDraw);
-            console.log("draw data: ", data);
+            // console.log('draw roomId: ', this.roomId);
+            // console.log('draw canDraw: ', this.canDraw);
+            // console.log("draw data: ", data);
             switch (data.type) {
                 case 'start':
                     this.ctx.beginPath();
@@ -54,7 +58,8 @@ export default {
             this.$webSocket.send(JSON.stringify({
                 data: {
                     type: data.type,
-                    data: { x: data.x, y: data.y },
+                    x: data.x,
+                    y: data.y,
                     roomId: this.roomId
                 },
                 type: 'drawPicture'
@@ -77,6 +82,18 @@ export default {
         end(e) {
             this.draw({ type: 'end' });
         }
+    },
+    watch: {
+        drawPictureData(newVal, oldVal) {
+            console.log(`new: ${JSON.stringify(newVal)}  old: ${JSON.stringify(oldVal)}`)
+            if (this.canDraw) return;
+            this.draw(newVal);
+        }
+    },
+    computed: {
+        ...mapState({
+            drawPictureData: state => state.drawPictureData
+        })
     }
 }
 </script>
