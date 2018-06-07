@@ -7,6 +7,8 @@ import createRouter from './router/router';
 import createStore from './store/store';
 
 import 'mint-ui/lib/style.css';
+import './assets/styles/iconfont/iconfont.js';
+import './assets/styles/global.css';
 
 Vue.use(VueRouter);
 Vue.use(VueX);
@@ -17,7 +19,8 @@ const store = createStore();
 
 router.beforeEach((to, from, next) => {
     if (!Vue.prototype.$webSocket) {
-        const webSocket = new WebSocket('ws://192.168.0.103:3333/ws/');
+        //  const webSocket = new WebSocket('ws://192.168.0.103:3333/ws/');
+        const webSocket = new WebSocket('ws://localhost:3333/ws/');
         webSocket.onmessage = (event) => {
             console.log("webSocket onmessage: ", event.data);
             var data = JSON.parse(event.data);

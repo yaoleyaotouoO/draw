@@ -1,14 +1,36 @@
 <template>
     <div>
-        <canvas v-if="canDraw" ref='canvasDom' width='400' height='300' style='border: 1px solid #999;' @touchstart='start' @touchmove='move' @touchend='end'>
+        <canvas v-if="true" ref='canvasDom' width='400' height='300' @touchstart='start' @touchmove='move' @touchend='end'>
         </canvas>
-        <canvas v-else ref='canvasDom' width='400' height='300' style='border: 1px solid #999;'>
+        <canvas v-else ref='canvasDom' width='400' height='300'>
         </canvas>
+        <div class="draw-features" v-if="true">
+            <svg class="draw-icon icon" aria-hidden="true" @click="changePenColor">
+                <use xlink:href="#icon-color-filling" :style="penColor"></use>
+            </svg>
+            <svg class="draw-icon-special icon" aria-hidden="true" @click="changePenWidth">
+                <use xlink:href="#icon-subtract" style="color:#FCFCFC;"></use>
+            </svg>
+            <div style="color:#FCFCFC;">{{this.penWidth}}</div>
+            <svg class="draw-icon icon" aria-hidden="true">
+                <use xlink:href="#icon-back" style="color:#FCFCFC;"></use>
+            </svg>
+            <svg class="draw-icon icon" aria-hidden="true">
+                <use xlink:href="#icon-more" style="color:#FCFCFC;"></use>
+            </svg>
+            <svg class="draw-icon icon" aria-hidden="true" @click="clear">
+                <use xlink:href="#icon-delete" style="color:#FCFCFC;"></use>
+            </svg>
+        </div>
+        <div v-else>
+
+        </div>
     </div>
 </template>
 
 <script>
 import { mapState } from 'vuex';
+import { MessageBox } from 'mint-ui';
 
 export default {
     props: {
@@ -19,24 +41,33 @@ export default {
         return {
             ctx: '',
             offsetLeft: 0,
-            offsetTop: 0
+            offsetTop: 0,
+            penColor: '',
+            penColorList: [
+                { color: '#000000' }, // 黑色
+                { color: '#d81e06' }, // 红色
+                { color: '#f4ea2a' }, // 黄色
+                { color: '#1afa29' }, // 绿色
+                { color: '#1296db' }  // 蓝色
+            ],
+            penWidth: '',
+            penWidthList: [1, 2, 3, 4, 5]
         }
     },
     mounted() {
-        console.log('draw roomId: ', this.roomId);
-        console.log('draw canDraw: ', this.canDraw);
         let canvasDom = this.$refs.canvasDom;
         this.offsetLeft = canvasDom.offsetLeft;
         this.offsetTop = canvasDom.offsetTop;
         var ctx = canvasDom.getContext('2d');
         this.ctx = ctx;
-        ctx.fillStyle = '#FF0000';
+        this.penColor = this.penColorList[0];
+        this.ctx.strokeStyle = this.penColor.color;
+        this.penWidth = this.penWidthList[0];
+        this.ctx.lineWidth = this.penWidth;
     },
     methods: {
         draw(data) {
-            // console.log('draw roomId: ', this.roomId);
-            // console.log('draw canDraw: ', this.canDraw);
-            // console.log("draw data: ", data);
+            console.log("draw data: ", data);
             switch (data.type) {
                 case 'start':
                     this.ctx.beginPath();
@@ -49,6 +80,15 @@ export default {
                     break;
                 case 'end':
                     this.ctx.stroke();
+                    break;
+                case 'clear':
+                    this.ctx.clearRect(0, 0, 400, 300);
+                    break;
+                case 'changePenColor':
+                    this.ctx.strokeStyle = data.data;
+                    break;
+                case 'changePenWidth':
+                    this.ctx.lineWidth = data.data;
                     break;
                 default:
                     console.warn('draw not type!');
@@ -81,12 +121,39 @@ export default {
         },
         end(e) {
             this.draw({ type: 'end' });
+        },
+        async clear() {
+            let result = await MessageBox({
+                title: '提示',
+                message: '确定执行清除操作?',
+                showCancelButton: true
+            });
+            if (result !== 'confirm') return;
+
+            this.draw({ type: 'clear' });
+        },
+        changePenColor() {
+            let penColorLength = this.penColorList.length;
+            let penColorIndex = this.penColorList.indexOf(this.penColor);
+            penColorIndex = penColorIndex + 1 >= penColorLength ? 0 : penColorIndex + 1;
+
+            this.penColor = this.penColorList[penColorIndex];
+            this.draw({ type: 'changePenColor', data: this.penColor.color });
+        },
+        changePenWidth() {
+            let penWidthLength = this.penWidthList.length;
+            let penWidthIndex = this.penWidthList.indexOf(this.penWidth);
+            penWidthIndex = penWidthIndex + 1 >= penWidthLength ? 0 : penWidthIndex + 1;
+
+            this.penWidth = this.penWidthList[penWidthIndex];
+            this.draw({ type: 'changePenWidth', data: this.penWidth });
         }
     },
     watch: {
         drawPictureData(newVal, oldVal) {
             console.log(`new: ${JSON.stringify(newVal)}  old: ${JSON.stringify(oldVal)}`)
             if (this.canDraw) return;
+
             this.draw(newVal);
         }
     },
@@ -97,3 +164,32 @@ export default {
     }
 }
 </script>
+
+<style>
+body {
+    margin: 0px;
+}
+
+.draw-features {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #26a2ff;
+}
+
+.draw-icon-special {
+    width: 10%;
+    font-size: 35px;
+    line-height: 100px;
+    color: #333;
+}
+
+.draw-icon {
+    width: 20%;
+    font-size: 35px;
+    line-height: 100px;
+    color: #333;
+}
+</style>
+

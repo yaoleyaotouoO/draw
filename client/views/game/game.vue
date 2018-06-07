@@ -1,9 +1,9 @@
 <template>
     <div>
-        <div>
-            <p class="game-spacing">我画: {{drawName}} ({{drawType}})</p>
-            <p style="float:right;" class="game-spacing">{{countDown}}</p>
-        </div>
+        <mt-header>
+            <div slot="left">我画：{{drawName}} ({{drawType}})</div>
+            <div slot="right">{{ countDown}}</div>
+        </mt-header>
         <draw :room-id="roomId" :can-draw="canDraw"></draw>
     </div>
 </template>
@@ -29,7 +29,7 @@ export default {
         console.log("this.$route: ", this.$route);
         console.log("roomId: ", this.roomId);
         let users = await api.getRoomUserList(this.roomId);
-        if (users[0].userId === Number(localStorage.getItem('userId')) 
+        if (users[0].userId === Number(localStorage.getItem('userId'))
             && users[0].userName === localStorage.getItem('userName')) {
             this.canDraw = true;
         }
@@ -40,8 +40,8 @@ export default {
 
 <style>
 .game-spacing {
-  margin-top: 4px;
-  margin-bottom: 4px;
-  float: left;
+    margin-top: 4px;
+    margin-bottom: 4px;
+    float: left;
 }
 </style>
