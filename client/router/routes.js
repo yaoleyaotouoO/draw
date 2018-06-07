@@ -24,7 +24,7 @@ export default [
     },
     {
         name:'game',
-        path: '/game',
+        path: '/game/:roomId',
         component: Game
     }
 ]

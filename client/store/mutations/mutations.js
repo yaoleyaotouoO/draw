@@ -15,14 +15,25 @@ export default {
     },
     addRoomUser(state, users) {
         if (users instanceof Array) {
-            let userIds = state.roomUserList.map(x => x.userId);
-            users = users.filter(x => userIds.indexOf(x.userId) === -1);
-            state.roomUserList.push(...users);
-            return;
-        }
+            state.roomUserList.unshift(...users);
+            let roomUserList = [];
+            state.roomUserList.forEach(x => {
+                if (roomUserList.length === 0) {
+                    roomUserList.push(x);
+                } else {
+                    let userIds = roomUserList.map(x => x.userId);
+                    if (userIds.indexOf(x.userId) === -1) {
+                        roomUserList.push(x);
+                    }
+                }
+            });
 
-        if (state.roomUserList.indexOf(users) > -1) return;
-        state.roomUserList.push(users);
+            state.roomUserList = roomUserList;
+        } else {
+            let userIds = state.roomUserList.map(x => x.userId);
+            if (userIds.indexOf(users.userId) > -1) return;
+            state.roomUserList.push(users);
+        }
     },
     deleteRoomUser(state) {
         state.roomUserList = [];

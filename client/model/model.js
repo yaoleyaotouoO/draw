@@ -52,5 +52,8 @@ export default {
     },
     getRoomUserList(roomId) {
         return handleRequest(request.get(`/api/${roomId}/getRoomUserList`));
+    },
+    getRoomIdByUserId(userId) {
+        return handleRequest(request.get(`/api/${userId}/getRoomIdByUserId`));
     }
 }

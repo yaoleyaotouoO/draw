@@ -1,10 +1,9 @@
 <template>
     <div>
-        <canvas v-if="true" ref='canvasDom' width='400' height='300' @touchstart='start' @touchmove='move' @touchend='end'>
-        </canvas>
-        <canvas v-else ref='canvasDom' width='400' height='300'>
-        </canvas>
-        <div class="draw-features" v-if="true">
+        <canvas v-if="canDraw" ref='canvasDom' width='400' height='300' @touchstart='start' @touchmove='move' @touchend='end'></canvas>
+        <canvas v-else ref='canvasDom' width='400' height='300'></canvas>
+
+        <div class="draw-features" v-if="canDraw">
             <svg class="draw-icon icon" aria-hidden="true" @click="changePenColor">
                 <use xlink:href="#icon-color-filling" :style="penColor"></use>
             </svg>
@@ -100,6 +99,7 @@ export default {
                     type: data.type,
                     x: data.x,
                     y: data.y,
+                    data: data.data,
                     roomId: this.roomId
                 },
                 type: 'drawPicture'
@@ -167,29 +167,29 @@ export default {
 
 <style>
 body {
-    margin: 0px;
+  margin: 0px;
 }
 
 .draw-features {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: #26a2ff;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #26a2ff;
 }
 
 .draw-icon-special {
-    width: 10%;
-    font-size: 35px;
-    line-height: 100px;
-    color: #333;
+  width: 10%;
+  font-size: 35px;
+  line-height: 100px;
+  color: #333;
 }
 
 .draw-icon {
-    width: 20%;
-    font-size: 35px;
-    line-height: 100px;
-    color: #333;
+  width: 20%;
+  font-size: 35px;
+  line-height: 100px;
+  color: #333;
 }
 </style>
 

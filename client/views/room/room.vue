@@ -30,7 +30,13 @@ export default {
         }
     },
     async mounted() {
-        let users = await api.getRoomUserList(this.$route.params.roomId);
+        let roomId = this.$route.params.roomId;
+        if(!roomId || !this.roomId){
+            let data = await api.getRoomIdByUserId(Number(localStorage.getItem('userId')));
+            roomId = data;
+            this.$store.commit('setRoomId', data);
+        }
+        let users = await api.getRoomUserList(roomId);
         this.$store.commit('addRoomUser', users);
     },
     methods: {

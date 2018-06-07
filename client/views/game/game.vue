@@ -12,6 +12,7 @@
 import Draw from './draw.vue';
 
 import api from '../../model/model';
+import roomVue from '../room/room.vue';
 
 export default {
     components: { Draw },
@@ -26,22 +27,25 @@ export default {
     },
     async mounted() {
         this.roomId = this.$route.query.roomId;
-        console.log("this.$route: ", this.$route);
-        console.log("roomId: ", this.roomId);
+        if (!this.roomId) {
+            let data = await api.getRoomIdByUserId(Number(localStorage.getItem('userId')));
+            this.roomId = data;
+            this.$store.commit('setRoomId', this.roomId);
+        }
+        
         let users = await api.getRoomUserList(this.roomId);
-        if (users[0].userId === Number(localStorage.getItem('userId'))
-            && users[0].userName === localStorage.getItem('userName')) {
+        if (users ? users[0].userId : null === Number(localStorage.getItem('userId'))
+            && users ? users[0].userName : null === localStorage.getItem('userName')) {
             this.canDraw = true;
         }
-        console.log("users: ", users);
     }
 }
 </script>
 
 <style>
 .game-spacing {
-    margin-top: 4px;
-    margin-bottom: 4px;
-    float: left;
+  margin-top: 4px;
+  margin-bottom: 4px;
+  float: left;
 }
 </style>
