@@ -22,7 +22,7 @@
             </svg>
         </div>
         <div v-else>
-
+            <input />
         </div>
     </div>
 </template>
@@ -136,16 +136,16 @@ export default {
             let penColorLength = this.penColorList.length;
             let penColorIndex = this.penColorList.indexOf(this.penColor);
             penColorIndex = penColorIndex + 1 >= penColorLength ? 0 : penColorIndex + 1;
-
             this.penColor = this.penColorList[penColorIndex];
+
             this.draw({ type: 'changePenColor', data: this.penColor.color });
         },
         changePenWidth() {
             let penWidthLength = this.penWidthList.length;
             let penWidthIndex = this.penWidthList.indexOf(this.penWidth);
             penWidthIndex = penWidthIndex + 1 >= penWidthLength ? 0 : penWidthIndex + 1;
-
             this.penWidth = this.penWidthList[penWidthIndex];
+
             this.draw({ type: 'changePenWidth', data: this.penWidth });
         }
     },

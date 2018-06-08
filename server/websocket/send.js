@@ -1,10 +1,13 @@
 const webSocketController = require('../controllers/websocket');
+const startJob = require("./job");
 
 broadcast = (wss, data) => {
     wss.clients.forEach((client) => {
         client.send(data);
     });
 }
+
+startJob();
 
 module.exports = async (wss, ws, message) => {
     console.log('websocket send message: ', message);
@@ -47,6 +50,9 @@ module.exports = async (wss, ws, message) => {
                 type: 'drawPicture'
             }));
 
+            break;
+        case 'keepAlive':
+            webSocketController.updateKeepAliveByUserId(messageData.data);
             break;
         default:
             console.warn('websocket not send message type');

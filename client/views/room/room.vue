@@ -36,7 +36,7 @@ export default {
             roomId = data;
             this.$store.commit('setRoomId', data);
         }
-        let users = await api.getRoomUserList(roomId);
+        let users = await api.getRoomUserListByRoomId(roomId);
         this.$store.commit('addRoomUser', users);
     },
     methods: {

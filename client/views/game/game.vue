@@ -33,7 +33,7 @@ export default {
             this.$store.commit('setRoomId', this.roomId);
         }
         
-        let users = await api.getRoomUserList(this.roomId);
+        let users = await api.getRoomUserListByRoomId(this.roomId);
         if (users ? users[0].userId : null === Number(localStorage.getItem('userId'))
             && users ? users[0].userName : null === localStorage.getItem('userName')) {
             this.canDraw = true;

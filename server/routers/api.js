@@ -24,8 +24,8 @@ apiRouter
         const data = await apiController.getRoomList();
         ctx.body = successResponse(data);
     })
-    .get('/:roomId/getRoomUserList', async (ctx) => {
-        const data = await apiController.getRoomUserList(ctx.params);
+    .get('/:roomId/getRoomUserListByRoomId', async (ctx) => {
+        const data = await apiController.getRoomUserListByRoomId(ctx.params);
         ctx.body = successResponse(data);
     })
     .get('/:userId/getRoomIdByUserId', async (ctx) => {

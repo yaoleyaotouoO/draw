@@ -19,7 +19,7 @@ async function getRoomList() {
     return await sqlQuery(sql);
 }
 
-async function getRoomUserList(query) {
+async function getRoomUserListByRoomId(query) {
     let sql = `
     SELECT 
         ru.userId, ui.name userName
@@ -38,7 +38,7 @@ async function getRoomIdByUserId(query) {
     let sql = `SELECT roomId from draw_roomuser WHERE userId = ?`;
     let values = [query.userId];
     let data = await sqlQuery(sql, values);
-    
+
     return data ? (data[0] ? data[0].roomId : null) : null;
 }
 
@@ -46,6 +46,6 @@ module.exports = {
     getUserInfo,
     login,
     getRoomList,
-    getRoomUserList,
+    getRoomUserListByRoomId,
     getRoomIdByUserId
 }

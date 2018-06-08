@@ -50,8 +50,8 @@ export default {
     getRoomList() {
         return handleRequest(request.get('/api/getRoomList'));
     },
-    getRoomUserList(roomId) {
-        return handleRequest(request.get(`/api/${roomId}/getRoomUserList`));
+    getRoomUserListByRoomId(roomId) {
+        return handleRequest(request.get(`/api/${roomId}/getRoomUserListByRoomId`));
     },
     getRoomIdByUserId(userId) {
         return handleRequest(request.get(`/api/${userId}/getRoomIdByUserId`));

@@ -9,12 +9,17 @@ module.exports = (server) => {
     });
 
     wss.on('connection', (ws) => {
+        console.log("connection ws: ", ws);
         ws.on('message', (message) => {
             webSocketSend(wss, ws, message);
         });
 
         ws.on('error', (err) => {
             console.log(`errored: ${err}`);
+        });
+
+        ws.on('close', (event) => {
+            console.log("websocket close: ", event);
         });
     });
 }

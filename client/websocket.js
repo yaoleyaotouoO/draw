@@ -1,6 +1,26 @@
+import moment from 'moment';
+
 export default (router, store) => {
     //  const webSocket = new WebSocket('ws://192.168.0.103:3333/ws/');
     const webSocket = new WebSocket('ws://localhost:3333/ws/');
+
+    const timeOut = 1000 * 60;
+
+    let keepAliveTimer = null;
+
+    webSocket.onopen = () => {
+        keepAliveTimer = setTimeout(() => {
+            webSocket.send(JSON.stringify({
+                data: {
+                    lastActiveTime: moment().format('YYYY-MM-DD HH:mm:ss').toString(),
+                    userId: Number(localStorage.getItem('userId')),
+                    isActive: 1
+                },
+                type: 'keepAlive'
+            }))
+        }, timeOut)
+    }
+
     webSocket.onmessage = (event) => {
         console.log("webSocket onmessage: ", event.data);
         var data = JSON.parse(event.data);
@@ -18,7 +38,6 @@ export default (router, store) => {
                 break;
             case 'startGame':
                 if (data.data.roomId === store.state.roomId) {
-                    //next({ path: '/game', query: { roomId: data.data.roomId } })
                     router.push({ name: 'game', params: { roomId: data.data.roomId } })
                 }
                 break;
@@ -30,9 +49,12 @@ export default (router, store) => {
 
                 break;
             default:
-                console.log("datatype: ", data.type);
                 console.warn('webSocket onmessage not type!');
         }
+    }
+
+    webSocket.onclose = (event) => {
+        console.log("event: ", event);
     }
 
     return webSocket;

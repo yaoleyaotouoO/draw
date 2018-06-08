@@ -38,6 +38,7 @@ new Vue({
     render: h => h(App)
 }).$mount('#app')
 
+// 阻止拖动屏幕
 document.addEventListener('touchmove', e => {
     e.preventDefault()
 }, false);
