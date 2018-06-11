@@ -28,5 +28,5 @@ let sqlQuery = (sql, values) => {
 }
 
 module.exports = {
-    sqlQuery: sqlQuery
+    sqlQuery
 }

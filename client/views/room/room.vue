@@ -2,7 +2,7 @@
     <div>
         <mt-header fixed :title="myUserName + '的房间'">
             <router-link to="/home" slot="left">
-                <mt-button icon="back">返回</mt-button>
+                <mt-button icon="back" @click="backToHome">返回</mt-button>
             </router-link>
         </mt-header>
 
@@ -31,7 +31,7 @@ export default {
     },
     async mounted() {
         let roomId = this.$route.params.roomId;
-        if(!roomId || !this.roomId){
+        if (!roomId || !this.roomId) {
             let data = await api.getRoomIdByUserId(Number(localStorage.getItem('userId')));
             roomId = data;
             this.$store.commit('setRoomId', data);
@@ -47,8 +47,9 @@ export default {
                 },
                 type: 'startGame'
             }));
-
-        //    this.$router.push({ name: 'game', params: { roomId: this.roomId } });
+        },
+        backToHome() {
+            api.deleteRoomUserByUserId(Number(localStorage.getItem('userId')));
         }
     },
     computed: {

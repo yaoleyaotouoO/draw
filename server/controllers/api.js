@@ -1,26 +1,25 @@
 const { sqlQuery } = require('../db/db');
 
-async function getUserInfo() {
-    let sql = 'SELECT * FROM draw_UserInfo';
 
-    return await sqlQuery(sql);
-}
+module.exports = {
+    async getUserInfo() {
+        let sql = 'SELECT * FROM draw_UserInfo';
 
-async function login(query) {
-    let sql = `SELECT * FROM draw_UserInfo WHERE userName = ? AND passWord = ?`
-    let values = [query.userName, query.passWord];
+        return await sqlQuery(sql);
+    },
+    async login(query) {
+        let sql = `SELECT * FROM draw_UserInfo WHERE userName = ? AND passWord = ?`
+        let values = [query.userName, query.passWord];
 
-    return await sqlQuery(sql, values);
-}
+        return await sqlQuery(sql, values);
+    },
+    async getRoomList() {
+        let sql = 'SELECT * FROM draw_Room WHERE status = 1';
 
-async function getRoomList() {
-    let sql = 'SELECT * FROM draw_Room WHERE status = 1';
-
-    return await sqlQuery(sql);
-}
-
-async function getRoomUserListByRoomId(query) {
-    let sql = `
+        return await sqlQuery(sql);
+    },
+    async getRoomUserListByRoomId(query) {
+        let sql = `
     SELECT 
         ru.userId, ui.name userName
     FROM 
@@ -29,23 +28,21 @@ async function getRoomUserListByRoomId(query) {
         draw_userinfo ui ON ui.id = ru.userId
     WHERE 
         roomId = ?`;
-    let values = [query.roomId];
+        let values = [query.roomId];
 
-    return await sqlQuery(sql, values);
-}
+        return await sqlQuery(sql, values);
+    },
+    async getRoomIdByUserId(query) {
+        let sql = `SELECT roomId from draw_roomuser WHERE userId = ?`;
+        let values = [query.userId];
+        let data = await sqlQuery(sql, values);
 
-async function getRoomIdByUserId(query) {
-    let sql = `SELECT roomId from draw_roomuser WHERE userId = ?`;
-    let values = [query.userId];
-    let data = await sqlQuery(sql, values);
+        return data ? (data[0] ? data[0].roomId : null) : null;
+    },
+    async deleteRoomUserByUserId(query) {
+        let sql = `DELETE FROM draw_roomuser WHERE userId = ?`;
+        let values = [query.userId];
 
-    return data ? (data[0] ? data[0].roomId : null) : null;
-}
-
-module.exports = {
-    getUserInfo,
-    login,
-    getRoomList,
-    getRoomUserListByRoomId,
-    getRoomIdByUserId
+        return await sqlQuery(sql, values);
+    }
 }

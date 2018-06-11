@@ -17,7 +17,7 @@ module.exports = async (wss, ws, message) => {
         case 'createRoom':
             let createRoomData = {
                 name: messageData.data.roomName,
-                createTime: new Date(),
+                createTime: messageData.data.createTime,
                 status: 1,
                 isPublic: messageData.data.isPublic
             }

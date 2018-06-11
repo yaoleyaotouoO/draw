@@ -4,21 +4,34 @@ export default (router, store) => {
     //  const webSocket = new WebSocket('ws://192.168.0.103:3333/ws/');
     const webSocket = new WebSocket('ws://localhost:3333/ws/');
 
-    const timeOut = 1000 * 60;
+    const timeOut = 1000 * 5;
 
     let keepAliveTimer = null;
 
-    webSocket.onopen = () => {
-        keepAliveTimer = setTimeout(() => {
+    let startKeepAlive = () => {
+        keepAliveTimer = setInterval(() => {
+            console.log("keepAliveTimer 111")
             webSocket.send(JSON.stringify({
                 data: {
-                    lastActiveTime: moment().format('YYYY-MM-DD HH:mm:ss').toString(),
+                    lastActiveTime: moment().format('YYYY-MM-DD HH:mm:ss'),
                     userId: Number(localStorage.getItem('userId')),
                     isActive: 1
                 },
                 type: 'keepAlive'
             }))
         }, timeOut)
+    }
+
+    let stopKeepAlive = () => {
+        keepAliveTimer = null;
+    }
+
+    let reconnect = () => {
+        webSocket = new WebSocket('ws://localhost:3333/ws/');
+    }
+
+    webSocket.onopen = () => {
+        startKeepAlive();
     }
 
     webSocket.onmessage = (event) => {
@@ -55,6 +68,7 @@ export default (router, store) => {
 
     webSocket.onclose = (event) => {
         console.log("event: ", event);
+        stopKeepAlive();
     }
 
     return webSocket;
