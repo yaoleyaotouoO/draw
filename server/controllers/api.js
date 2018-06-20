@@ -20,14 +20,14 @@ module.exports = {
     },
     async getRoomUserListByRoomId(query) {
         let sql = `
-    SELECT 
-        ru.userId, ui.name userName
-    FROM 
-        draw_RoomUser ru
-    LEFT JOIN 
-        draw_userinfo ui ON ui.id = ru.userId
-    WHERE 
-        roomId = ?`;
+            SELECT 
+                ru.userId, ui.name userName
+            FROM 
+                draw_RoomUser ru
+            LEFT JOIN 
+                draw_userinfo ui ON ui.id = ru.userId
+            WHERE 
+                roomId = ?`;
         let values = [query.roomId];
 
         return await sqlQuery(sql, values);

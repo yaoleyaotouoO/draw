@@ -34,5 +34,12 @@ module.exports = {
         let values = [query.isActive, query.lastActiveTime, query.userId];
 
         return await sqlQuery(sql, values);
+    },
+    async setRoomUserAtive(query) {
+        console.log("setRoomUserAtive query: ", query)
+        let sql = `UPDATE draw_userinfo SET isActive = ? WHERE id = ?`;
+        let values = [query.isActive, query.id];
+
+        return await sqlQuery(sql, values);
     }
 }
