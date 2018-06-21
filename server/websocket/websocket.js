@@ -10,7 +10,7 @@ module.exports = (server) => {
     });
 
     wss.on('connection', (ws) => {
-        new WebSocketConnection(ws);
+        new WebSocketConnection(ws, wss);
     });
 }
 
@@ -23,7 +23,7 @@ class WebSocketConnection {
             const messageData = JSON.parse(message);
             if (messageData.type === 'setWebSocketUserId') {
                 this.userId = messageData.data.userId;
-                webSocketController.setRoomUserAtive({isActive: 1, id: this.userId})
+                webSocketController.setRoomUserAtive({ isActive: 1, id: this.userId })
                 return;
             }
 

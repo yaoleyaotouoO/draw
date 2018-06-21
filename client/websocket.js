@@ -8,19 +8,19 @@ export default (router, store) => {
 
     let keepAliveTimer = null;
 
-    let startKeepAlive = () => {
-        keepAliveTimer = setInterval(() => {
-            console.log("keepAliveTimer 111")
-            webSocket.send(JSON.stringify({
-                data: {
-                    lastActiveTime: moment().format('YYYY-MM-DD HH:mm:ss'),
-                    userId: Number(localStorage.getItem('userId')),
-                    isActive: 1
-                },
-                type: 'keepAlive'
-            }))
-        }, timeOut)
-    }
+    // let startKeepAlive = () => {
+    //     keepAliveTimer = setInterval(() => {
+    //         console.log("keepAliveTimer 111")
+    //         webSocket.send(JSON.stringify({
+    //             data: {
+    //                 lastActiveTime: moment().format('YYYY-MM-DD HH:mm:ss'),
+    //                 userId: Number(localStorage.getItem('userId')),
+    //                 isActive: 1
+    //             },
+    //             type: 'keepAlive'
+    //         }))
+    //     }, timeOut)
+    // }
 
     let stopKeepAlive = () => {
         keepAliveTimer = null;

@@ -32,7 +32,7 @@ export default {
             this.roomId = data;
             this.$store.commit('setRoomId', this.roomId);
         }
-        
+
         let users = await api.getRoomUserListByRoomId(this.roomId);
         if (users ? users[0].userId : null === Number(localStorage.getItem('userId'))
             && users ? users[0].userName : null === localStorage.getItem('userName')) {
@@ -44,8 +44,8 @@ export default {
 
 <style>
 .game-spacing {
-  margin-top: 4px;
-  margin-bottom: 4px;
-  float: left;
+    margin-top: 4px;
+    margin-bottom: 4px;
+    float: left;
 }
 </style>
