@@ -1,13 +1,10 @@
 const webSocketController = require('../controllers/websocket');
-const startJob = require("./job");
 
 broadcast = (wss, data) => {
     wss.clients.forEach((client) => {
         client.send(data);
     });
 }
-
-startJob();
 
 module.exports = async (wss, ws, message) => {
     console.log('websocket send message: ', message);
@@ -43,6 +40,11 @@ module.exports = async (wss, ws, message) => {
                 type: 'startGame'
             }));
 
+            let roomId = messageData.data.roomId;
+            let topicData = await webSocketController.getRandomTopic();
+            topicData = topicData[0];
+            let startTime = 90;
+
             break;
         case 'drawPicture':
             broadcast(wss, JSON.stringify({
@@ -54,9 +56,10 @@ module.exports = async (wss, ws, message) => {
         case 'keepAlive':
             webSocketController.updateKeepAliveByUserId(messageData.data);
             break;
+        case '':
+
+            break;
         default:
             console.warn('websocket not send message type');
     }
-    //   ws.send(msg);
-    //   broadcast(wss, msg);
 }

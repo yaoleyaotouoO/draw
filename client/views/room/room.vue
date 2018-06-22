@@ -26,17 +26,14 @@ import { mapState } from 'vuex';
 export default {
     data() {
         return {
-            myUserName: localStorage.getItem('userName')
+            myUserName: localStorage.getItem('userName'),
+            roomId: ''
         }
     },
     async mounted() {
-        let roomId = this.$route.params.roomId;
-        if (!roomId || !this.roomId) {
-            let data = await api.getRoomIdByUserId(Number(localStorage.getItem('userId')));
-            roomId = data;
-            this.$store.commit('setRoomId', data);
-        }
-        let users = await api.getRoomUserListByRoomId(roomId);
+        this.roomId = this.$route.params.roomId;
+        localStorage.setItem('roomId', this.roomId);
+        let users = await api.getRoomUserListByRoomId(this.roomId);
         this.$store.commit('addRoomUser', users);
     },
     methods: {
@@ -49,6 +46,7 @@ export default {
             }));
         },
         backToHome() {
+            localStorage.removeItem('roomId');
             api.deleteRoomUserByUserId(Number(localStorage.getItem('userId')));
         }
     },
@@ -68,8 +66,7 @@ export default {
             });
         },
         ...mapState({
-            roomUserList: state => state.roomUserList,
-            roomId: state => state.roomId
+            roomUserList: state => state.roomUserList
         })
     }
 }

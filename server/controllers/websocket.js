@@ -2,11 +2,11 @@ const { sqlQuery } = require('../db/db');
 
 
 module.exports = {
-    async createRoom(query) {
+    createRoom(query) {
         let sql = 'INSERT INTO draw_Room(id, name, createTime, status) VALUES (0, ?, ?, ?)';
-        let values = [query.name, query.createRoom, query.status];
+        let values = [query.name, query.createTime, query.status];
 
-        return await sqlQuery(sql, values);
+        return sqlQuery(sql, values);
     },
     async addRoomUser(query) {
         let sql = 'SELECT * FROM draw_RoomUser WHERE userId = ? AND roomId = ?';
@@ -18,28 +18,43 @@ module.exports = {
 
         return await sqlQuery(sql, values);
     },
-    async getAllRoomUserList() {
+    getAllRoomUserList() {
         let sql = `SELECT id,userId, roomId, lastActiveTime, isActive FROM draw_roomuser`;
 
-        return await sqlQuery(sql);
+        return sqlQuery(sql);
     },
-    async updateRoomUserActive(query) {
+    updateRoomUserActive(query) {
         let sql = `UPDATE draw_roomuser SET isActive = ? WHERE id = ?`;
         let values = [query.isActive, query.id];
 
-        return await sqlQuery(sql, values);
+        return sqlQuery(sql, values);
     },
-    async updateKeepAliveByUserId(query) {
+    updateKeepAliveByUserId(query) {
         let sql = `UPDATE draw_roomuser SET isActive = ?, lastActiveTime = ? WHERE userId = ?`;
         let values = [query.isActive, query.lastActiveTime, query.userId];
 
-        return await sqlQuery(sql, values);
+        return sqlQuery(sql, values);
     },
-    async setRoomUserAtive(query) {
-        console.log("setRoomUserAtive query: ", query)
+    setRoomUserAtive(query) {
         let sql = `UPDATE draw_userinfo SET isActive = ? WHERE id = ?`;
         let values = [query.isActive, query.id];
 
-        return await sqlQuery(sql, values);
+        return sqlQuery(sql, values);
+    },
+    async getRandomTopic() {
+        let sql = `SELECT count(*) count FROM draw_topic`;
+        let topicCount = await sqlQuery(sql);
+        let RandomCount = parseInt(Math.random() * topicCount[0].count + 1);
+
+        sql = `SELECT * FROM draw_topic WHERE Id = ?`;
+        let values = [isNaN(RandomCount) ? 0 : RandomCount];
+
+        return sqlQuery(sql, values);
+    },
+    updateRoomUserTopicId(query) {
+        let sql = `UPDATE draw_roomuser SET topicId = ? WHERE id = ?`;
+        let values = [query.id];
+
+        return sqlQuery(sql, values);
     }
 }

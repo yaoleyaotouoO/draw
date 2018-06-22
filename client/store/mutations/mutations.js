@@ -10,9 +10,6 @@ export default {
             state.roomList.push(data);
         }
     },
-    setRoomId(state, roomId) {
-        state.roomId = roomId;
-    },
     addRoomUser(state, users) {
         if (users instanceof Array) {
             state.roomUserList.unshift(...users);

@@ -21,9 +21,6 @@
                 <use xlink:href="#icon-delete" style="color:#FCFCFC;"></use>
             </svg>
         </div>
-        <div v-else>
-            <input />
-        </div>
     </div>
 </template>
 
@@ -33,7 +30,7 @@ import { MessageBox } from 'mint-ui';
 
 export default {
     props: {
-        roomId: Number,
+        roomId: String,
         canDraw: Boolean
     },
     data() {

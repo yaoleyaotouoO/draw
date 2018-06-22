@@ -34,8 +34,7 @@ export default {
             MessageBox.prompt('请输入房间名').then(({ value, action }) => {
                 console.log(`value: ${value}  action: ${action}`);
                 this.$webSocket.send(JSON.stringify({ data: { roomName: value, createTime: moment().format('YYYY-MM-DD HH:mm:ss') }, type: 'createRoom' }));
-            })
-            // this.$router.push('/room');
+            });
         },
         goToRoom(roomId) {
             this.$webSocket.send(JSON.stringify({
@@ -47,7 +46,7 @@ export default {
                 type: 'addRoomUser'
             }));
 
-            this.$store.commit('setRoomId', roomId);
+            this.$store.commit('setRoomId', roomId); 
             this.$store.commit('deleteRoomUser');
             this.$router.push({ name: 'room', params: { roomId: roomId } });
         }

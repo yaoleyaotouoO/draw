@@ -4,45 +4,25 @@ export default (router, store) => {
     //  const webSocket = new WebSocket('ws://192.168.0.103:3333/ws/');
     const webSocket = new WebSocket('ws://localhost:3333/ws/');
 
-    const timeOut = 1000 * 5;
-
-    let keepAliveTimer = null;
-
-    // let startKeepAlive = () => {
-    //     keepAliveTimer = setInterval(() => {
-    //         console.log("keepAliveTimer 111")
-    //         webSocket.send(JSON.stringify({
-    //             data: {
-    //                 lastActiveTime: moment().format('YYYY-MM-DD HH:mm:ss'),
-    //                 userId: Number(localStorage.getItem('userId')),
-    //                 isActive: 1
-    //             },
-    //             type: 'keepAlive'
-    //         }))
-    //     }, timeOut)
-    // }
-
-    let stopKeepAlive = () => {
-        keepAliveTimer = null;
-    }
-
     let reconnect = () => {
         webSocket = new WebSocket('ws://localhost:3333/ws/');
     }
 
     webSocket.onopen = () => {
-        startKeepAlive();
+        
     }
 
     webSocket.onmessage = (event) => {
         console.log("webSocket onmessage: ", event.data);
-        var data = JSON.parse(event.data);
+        let data = JSON.parse(event.data);
+        let roomId = localStorage.getItem('roomId') && localStorage.getItem('roomId').toString();
+        let dataRoomId = data.data.roomId.toString();
         switch (data.type) {
             case 'addRoom':
                 store.commit('addRoomList', data.data);
                 break;
             case 'addRoomUser':
-                if (data.data.roomId === store.state.roomId) {
+                if (dataRoomId === roomId) {
                     store.commit('addRoomUser', {
                         userId: data.data.userId,
                         userName: data.data.userName
@@ -50,12 +30,12 @@ export default (router, store) => {
                 }
                 break;
             case 'startGame':
-                if (data.data.roomId === store.state.roomId) {
-                    router.push({ name: 'game', params: { roomId: data.data.roomId } })
+                if (dataRoomId === roomId) {
+                    router.push({ name: 'game', params: { roomId } })
                 }
                 break;
             case 'drawPicture':
-                if (data.data.roomId === store.state.roomId) {
+                if (dataRoomId === roomId) {
                     console.log('data: ', data.data);
                     store.commit('drawPicture', data.data);
                 }
@@ -68,7 +48,6 @@ export default (router, store) => {
 
     webSocket.onclose = (event) => {
         console.log("event: ", event);
-        stopKeepAlive();
     }
 
     return webSocket;

@@ -2,23 +2,23 @@ const { sqlQuery } = require('../db/db');
 
 
 module.exports = {
-    async getUserInfo() {
+    getUserInfo() {
         let sql = 'SELECT * FROM draw_UserInfo';
 
-        return await sqlQuery(sql);
+        return sqlQuery(sql);
     },
-    async login(query) {
+    login(query) {
         let sql = `SELECT * FROM draw_UserInfo WHERE userName = ? AND passWord = ?`
         let values = [query.userName, query.passWord];
 
-        return await sqlQuery(sql, values);
+        return sqlQuery(sql, values);
     },
-    async getRoomList() {
+    getRoomList() {
         let sql = 'SELECT * FROM draw_Room WHERE status = 1';
 
-        return await sqlQuery(sql);
+        return sqlQuery(sql);
     },
-    async getRoomUserListByRoomId(query) {
+    getRoomUserListByRoomId(query) {
         let sql = `
             SELECT 
                 ru.userId, ui.name userName
@@ -30,7 +30,7 @@ module.exports = {
                 roomId = ?`;
         let values = [query.roomId];
 
-        return await sqlQuery(sql, values);
+        return sqlQuery(sql, values);
     },
     async getRoomIdByUserId(query) {
         let sql = `SELECT roomId from draw_roomuser WHERE userId = ?`;
@@ -39,10 +39,10 @@ module.exports = {
 
         return data ? (data[0] ? data[0].roomId : null) : null;
     },
-    async deleteRoomUserByUserId(query) {
+    deleteRoomUserByUserId(query) {
         let sql = `DELETE FROM draw_roomuser WHERE userId = ?`;
         let values = [query.userId];
 
-        return await sqlQuery(sql, values);
+        return sqlQuery(sql, values);
     }
 }

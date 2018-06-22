@@ -1,6 +1,7 @@
 const ws = require('ws');
 const webSocketSend = require('./send');
 const webSocketController = require('../controllers/websocket');
+const apiController = require('../controllers/api')
 
 const WebSocketServer = ws.Server;
 
@@ -36,7 +37,12 @@ class WebSocketConnection {
 
         ws.on('close', (event) => {
             console.log("userId: ", this.userId);
-            this.userId && webSocketController.setRoomUserAtive({ isActive: 0, id: this.userId });
+            if (!this.userId) {
+                return;
+            }
+
+            webSocketController.setRoomUserAtive({ isActive: 0, id: this.userId });
+            apiController.deleteRoomUserByUserId({ userId: this.userId });
         });
     }
 }
