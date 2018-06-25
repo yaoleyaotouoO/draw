@@ -18,7 +18,7 @@ module.exports = {
 
         return sqlQuery(sql);
     },
-    getRoomUserListByRoomId(query) {
+    getRoomUserListByRoomId({roomId}) {
         let sql = `
             SELECT 
                 ru.userId, ui.name userName
@@ -28,7 +28,7 @@ module.exports = {
                 draw_userinfo ui ON ui.id = ru.userId
             WHERE 
                 roomId = ?`;
-        let values = [query.roomId];
+        let values = [roomId];
 
         return sqlQuery(sql, values);
     },

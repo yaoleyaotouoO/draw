@@ -9,23 +9,29 @@ export default (router, store) => {
     }
 
     webSocket.onopen = () => {
-        
+        webSocket.send(JSON.stringify({
+            data: {
+                userId: Number(localStorage.getItem('userId'))
+            },
+            type: 'setWebSocketUserId'
+        }))
     }
 
     webSocket.onmessage = (event) => {
-        console.log("webSocket onmessage: ", event.data);
-        let data = JSON.parse(event.data);
+        //        console.log("webSocket onmessage: ", event.data);
+        let messageData = JSON.parse(event.data);
         let roomId = localStorage.getItem('roomId') && localStorage.getItem('roomId').toString();
-        let dataRoomId = data.data.roomId.toString();
-        switch (data.type) {
+        let userId = localStorage.getItem('userId') && Number(localStorage.getItem('userId'));
+        let dataRoomId = messageData.data.roomId.toString();
+        switch (messageData.type) {
             case 'addRoom':
-                store.commit('addRoomList', data.data);
+                store.commit('addRoomList', messageData.data);
                 break;
             case 'addRoomUser':
                 if (dataRoomId === roomId) {
                     store.commit('addRoomUser', {
-                        userId: data.data.userId,
-                        userName: data.data.userName
+                        userId: messageData.data.userId,
+                        userName: messageData.data.userName
                     });
                 }
                 break;
@@ -36,10 +42,19 @@ export default (router, store) => {
                 break;
             case 'drawPicture':
                 if (dataRoomId === roomId) {
-                    console.log('data: ', data.data);
-                    store.commit('drawPicture', data.data);
+                    console.log('data: ', messageData.data);
+                    store.commit('drawPicture', messageData.data);
                 }
-
+                break;
+            case 'gameInfo':
+                if (dataRoomId === roomId) {
+                    store.commit('setGameInfo', messageData.data);
+                }
+                break;
+            case 'showAnswer':
+                if (dataRoomId === roomId) {
+                    store.commit('setShowAnswerInfo', messageData.data);
+                }
                 break;
             default:
                 console.warn('webSocket onmessage not type!');

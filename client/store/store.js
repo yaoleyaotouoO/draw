@@ -13,6 +13,7 @@ export default () => {
         mutations
     });
 
+    // 热更替
     if (module.hot) {
         module.hot.accept([
             './state/state',

@@ -46,7 +46,6 @@ export default {
                 type: 'addRoomUser'
             }));
 
-            this.$store.commit('setRoomId', roomId); 
             this.$store.commit('deleteRoomUser');
             this.$router.push({ name: 'room', params: { roomId: roomId } });
         }

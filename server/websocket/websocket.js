@@ -2,6 +2,7 @@ const ws = require('ws');
 const webSocketSend = require('./send');
 const webSocketController = require('../controllers/websocket');
 const apiController = require('../controllers/api')
+const userCache = require('./userCache');
 
 const WebSocketServer = ws.Server;
 
@@ -25,6 +26,7 @@ class WebSocketConnection {
             if (messageData.type === 'setWebSocketUserId') {
                 this.userId = messageData.data.userId;
                 webSocketController.setRoomUserAtive({ isActive: 1, id: this.userId })
+                userCache.set(this.userId, {ws});
                 return;
             }
 
@@ -43,6 +45,7 @@ class WebSocketConnection {
 
             webSocketController.setRoomUserAtive({ isActive: 0, id: this.userId });
             apiController.deleteRoomUserByUserId({ userId: this.userId });
+            userCache.delete(this.userId);
         });
     }
 }

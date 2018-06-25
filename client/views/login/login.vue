@@ -36,12 +36,12 @@ export default {
                 this.errorMessage = '';
                 localStorage.setItem('userName', rawData.userName);
                 localStorage.setItem('userId', rawData.id);
-                this.$webSocket.send(JSON.stringify({
-                    data: {
-                        userId: Number(localStorage.getItem('userId'))
-                    },
-                    type: 'setWebSocketUserId'
-                }))
+                // this.$webSocket.send(JSON.stringify({
+                //     data: {
+                //         userId: Number(localStorage.getItem('userId'))
+                //     },
+                //     type: 'setWebSocketUserId'
+                // }))
 
                 this.$router.push('/home');
             } else {

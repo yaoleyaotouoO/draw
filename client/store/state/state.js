@@ -1,5 +1,7 @@
 export default {
     roomList: [],
     roomUserList: [],
-    drawPictureData: {}
+    drawPictureData: {},
+    gameInfo: {},
+    showAnswerInfo: {}
 }

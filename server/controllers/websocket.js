@@ -29,12 +29,6 @@ module.exports = {
 
         return sqlQuery(sql, values);
     },
-    updateKeepAliveByUserId(query) {
-        let sql = `UPDATE draw_roomuser SET isActive = ?, lastActiveTime = ? WHERE userId = ?`;
-        let values = [query.isActive, query.lastActiveTime, query.userId];
-
-        return sqlQuery(sql, values);
-    },
     setRoomUserAtive(query) {
         let sql = `UPDATE draw_userinfo SET isActive = ? WHERE id = ?`;
         let values = [query.isActive, query.id];
@@ -48,12 +42,6 @@ module.exports = {
 
         sql = `SELECT * FROM draw_topic WHERE Id = ?`;
         let values = [isNaN(RandomCount) ? 0 : RandomCount];
-
-        return sqlQuery(sql, values);
-    },
-    updateRoomUserTopicId(query) {
-        let sql = `UPDATE draw_roomuser SET topicId = ? WHERE id = ?`;
-        let values = [query.id];
 
         return sqlQuery(sql, values);
     }

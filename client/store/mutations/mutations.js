@@ -37,5 +37,11 @@ export default {
     },
     drawPicture(state, data) {
         state.drawPictureData = data;
+    },
+    setGameInfo(state, data) {
+        state.gameInfo = data;
+    },
+    setShowAnswerInfo(state, data) {
+        state.showAnswerInfo = data;
     }
 }

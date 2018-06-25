@@ -1,4 +1,5 @@
 const webSocketController = require('../controllers/websocket');
+const startGame = require('./startGame');
 
 broadcast = (wss, data) => {
     wss.clients.forEach((client) => {
@@ -41,9 +42,7 @@ module.exports = async (wss, ws, message) => {
             }));
 
             let roomId = messageData.data.roomId;
-            let topicData = await webSocketController.getRandomTopic();
-            topicData = topicData[0];
-            let startTime = 90;
+            startGame(wss, roomId);
 
             break;
         case 'drawPicture':
@@ -51,12 +50,6 @@ module.exports = async (wss, ws, message) => {
                 data: messageData.data,
                 type: 'drawPicture'
             }));
-
-            break;
-        case 'keepAlive':
-            webSocketController.updateKeepAliveByUserId(messageData.data);
-            break;
-        case '':
 
             break;
         default:
