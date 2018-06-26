@@ -1,5 +1,5 @@
 const webSocketController = require('../controllers/websocket');
-const startGame = require('./startGame');
+const { startGame } = require('./startGame');
 
 broadcast = (wss, data) => {
     wss.clients.forEach((client) => {

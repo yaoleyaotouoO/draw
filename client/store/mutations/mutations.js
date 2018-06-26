@@ -42,6 +42,6 @@ export default {
         state.gameInfo = data;
     },
     setShowAnswerInfo(state, data) {
-        state.showAnswerInfo = data;
+        state.showAnswerInfo = Object.assign({}, state.showAnswerInfo, data);
     }
 }

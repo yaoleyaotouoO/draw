@@ -56,6 +56,10 @@ export default (router, store) => {
                     store.commit('setShowAnswerInfo', messageData.data);
                 }
                 break;
+            case 'gameOver':
+                if (dataRoomId === roomId) {
+                    store.commit('', messageData.data);
+                }
             default:
                 console.warn('webSocket onmessage not type!');
         }

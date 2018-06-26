@@ -16,6 +16,7 @@
 import Draw from './draw.vue';
 import api from '../../model/model';
 import { mapState } from 'vuex';
+import { MessageBox } from 'mint-ui';
 
 export default {
     components: { Draw },
@@ -49,12 +50,15 @@ export default {
             this.drawName = newVal.topicName || newVal.topicPrompt;
             this.gameTime = newVal.gameTime;
             this.roomUserList = newVal.roomUserList;
-            console.log("newVal: ", newVal);
+            if (newVal.gameTime === 10) {
+                console.log("newVal: ", newVal);
+            }
         },
         showAnswerInfo(newVal, oldVal) {
             if (newVal.showAnswer) {
                 // 弹窗
-                this.showAnswerInfo = Object.assign({}, this.showAnswerInfo, { showAnswer: false });
+                MessageBox('本轮答案', this.showAnswerInfo.topicName);
+                this.$store.commit('setShowAnswerInfo', { showAnswer: false });
             }
         }
     },

@@ -13,7 +13,7 @@
                 </li>
             </ul>
 
-            <mt-button type='primary' size='large' v-if="canStartGame" @click="startGame">开始游戏</mt-button>
+            <mt-button type='primary' :disabled="!canStart" size='large' v-if="canStartGame" @click="startGame">{{canStart ? '开始游戏' : '大于2人才能开始游戏'}}</mt-button>
             <mt-button type='primary' v-else disabled size='large'>只有房主才能开始游戏</mt-button>
         </div>
     </div>
@@ -64,6 +64,9 @@ export default {
 
                 return data;
             });
+        },
+        canStart() {
+            return this.roomUserList.length > 1
         },
         ...mapState({
             roomUserList: state => state.roomUserList

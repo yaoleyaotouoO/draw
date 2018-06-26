@@ -148,7 +148,7 @@ export default {
     },
     watch: {
         drawPictureData(newVal, oldVal) {
-            console.log(`new: ${JSON.stringify(newVal)}  old: ${JSON.stringify(oldVal)}`)
+        //    console.log(`new: ${JSON.stringify(newVal)}  old: ${JSON.stringify(oldVal)}`)
             if (this.canDraw) return;
 
             this.draw(newVal);
