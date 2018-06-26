@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import App from './app.vue';
+import App from './App.vue';
 import Mint from 'mint-ui';
 import VueX from 'vuex';
 import VueRouter from 'vue-router';
