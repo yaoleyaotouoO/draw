@@ -2,6 +2,8 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const webpack = require('webpack');
 
+var env = process.env.NODE_ENV
+
 module.exports = {
     entry: {
         app: './client/index.js'
@@ -9,7 +11,7 @@ module.exports = {
     output: {
         filename: '[name].js',
         path: path.resolve(__dirname, 'dist'),
-        publicPath: '/' // 确保文件资源能够正确的访问
+        publicPath: process.env.NODE_ENV === 'production' ? './' : '/' // 确保文件资源能够正确的访问
     },
     plugins: [
         new HtmlWebpackPlugin({

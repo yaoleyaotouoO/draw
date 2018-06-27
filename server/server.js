@@ -6,7 +6,7 @@ const createWebSocket = require('./websocket/websocket');
 const app = new Koa();
 app.use(KoaBody());
 
-const HOST = 'localhost';
+const HOST = '0.0.0.0';
 const PORT = 3333;
 
 let server = app.listen(PORT, HOST, () => {
