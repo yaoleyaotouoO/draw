@@ -61,11 +61,7 @@ module.exports = {
         overlay: {
             errors: true
         },
-        headers: { 'Access-Control-Allow-Origin': '*' },
         historyApiFallback: true,
-        proxy: {
-            '/api': 'http://127.0.0.1:3333'
-        },
         hot: true
     },
     // 解释在这 https://github.com/vuejs-templates/webpack/issues/215 

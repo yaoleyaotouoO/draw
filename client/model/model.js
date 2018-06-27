@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const request = axios.create({
-    baseURL: 'http://draw.yaoleyaotou.xin:3333',
+    baseURL: '/',
     headers: {
         "Authorization": `Bearer 11111`
     }
