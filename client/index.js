@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import App from './App.vue';
-import Mint from 'mint-ui';
+import { Button, Header, Field } from 'mint-ui';
 import VueX from 'vuex';
 import VueRouter from 'vue-router';
 import createRouter from './router/router';
@@ -13,7 +13,10 @@ import './assets/styles/global.css';
 
 Vue.use(VueRouter);
 Vue.use(VueX);
-Vue.use(Mint);
+//Vue.use(Mint);
+Vue.component(Button.name, Button);
+Vue.component(Header.name, Header);
+Vue.component(Field.name, Field);
 
 const router = createRouter();
 const store = createStore();
