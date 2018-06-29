@@ -2,7 +2,7 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const webpack = require('webpack');
 
-var env = process.env.NODE_ENV
+const isDev = process.env.NODE_ENV === 'development';
 
 module.exports = {
     entry: {
@@ -11,9 +11,14 @@ module.exports = {
     output: {
         filename: '[name].js',
         path: path.resolve(__dirname, 'dist'),
-        publicPath: process.env.NODE_ENV === 'production' ? './' : '/' // 确保文件资源能够正确的访问
+        publicPath: isDev ? '/' : './' // 确保文件资源能够正确的访问
     },
     plugins: [
+        new webpack.DefinePlugin({
+            'process.env': {
+                NODE_ENV: isDev ? '"development"' : '"production"'
+            }
+        }),
         new HtmlWebpackPlugin({
             template: path.join(__dirname, 'index.html') // 模板html, 一开始加载的html
         }),
