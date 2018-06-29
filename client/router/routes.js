@@ -1,4 +1,4 @@
-// import App from '../App.vue';
+// import App from '../app.vue';
 // import Login from '../views/login/login.vue';
 // import Home from '../views/home/home.vue';
 // import Room from '../views/room/room.vue';
@@ -7,7 +7,7 @@
 export default [
     {
         path: '/',
-        component: () => import('../App.vue')
+        component: () => import('../app.vue')
     },
     {
         path: '/login',

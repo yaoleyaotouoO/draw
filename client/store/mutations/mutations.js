@@ -43,5 +43,8 @@ export default {
     },
     setShowAnswerInfo(state, data) {
         state.showAnswerInfo = Object.assign({}, state.showAnswerInfo, data);
+    },
+    setGameOverData(state, data) {
+        state.gameOverData = Object.assign({}, state.gameOverData, data);
     }
 }

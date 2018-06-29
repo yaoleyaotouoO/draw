@@ -3,5 +3,6 @@ export default {
     roomUserList: [],
     drawPictureData: {},
     gameInfo: {},
-    showAnswerInfo: {}
+    showAnswerInfo: {},
+    gameOverData: {}
 }

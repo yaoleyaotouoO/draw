@@ -3,20 +3,22 @@ export default (router, store) => {
     let webSocket = new WebSocket('ws://localhost:3333/ws/');
 
     let reconnect = () => {
-     //   webSocket = new WebSocket('ws://localhost:3333/ws/');
+        //   webSocket = new WebSocket('ws://localhost:3333/ws/');
     }
 
     webSocket.onopen = () => {
         webSocket.send(JSON.stringify({
             data: {
-                userId: Number(localStorage.getItem('userId'))
+                userId: Number(localStorage.getItem('userId')),
+                userName: localStorage.getItem('userName'),
+                roomId: localStorage.getItem('roomId')
             },
             type: 'setWebSocketUserId'
         }))
     }
 
     webSocket.onmessage = (event) => {
-        //        console.log("webSocket onmessage: ", event.data);
+        // console.log("webSocket onmessage: ", event.data);
         let messageData = JSON.parse(event.data);
         let roomId = localStorage.getItem('roomId') && localStorage.getItem('roomId').toString();
         let userId = localStorage.getItem('userId') && Number(localStorage.getItem('userId'));
@@ -56,8 +58,9 @@ export default (router, store) => {
                 break;
             case 'gameOver':
                 if (dataRoomId === roomId) {
-                    store.commit('', messageData.data);
+                    store.commit('setGameOverData', messageData.data);
                 }
+                break;
             default:
                 console.warn('webSocket onmessage not type!');
         }
