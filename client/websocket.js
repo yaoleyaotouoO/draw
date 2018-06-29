@@ -1,9 +1,9 @@
 export default (router, store) => {
     //  const webSocket = new WebSocket('ws://192.168.0.103:3333/ws/');
-    const webSocket = new WebSocket('ws://localhost:3333/ws/');
+    let webSocket = new WebSocket('ws://localhost:3333/ws/');
 
     let reconnect = () => {
-        webSocket = new WebSocket('ws://localhost:3333/ws/');
+     //   webSocket = new WebSocket('ws://localhost:3333/ws/');
     }
 
     webSocket.onopen = () => {
