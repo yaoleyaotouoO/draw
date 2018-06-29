@@ -1,5 +1,3 @@
-import moment from 'moment';
-
 export default (router, store) => {
     //  const webSocket = new WebSocket('ws://192.168.0.103:3333/ws/');
     const webSocket = new WebSocket('ws://localhost:3333/ws/');

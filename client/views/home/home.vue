@@ -18,7 +18,6 @@
 import { MessageBox } from 'mint-ui';
 import api from '../../model/model';
 import { mapState } from 'vuex';
-import moment from 'moment';
 
 export default {
     data() {
@@ -33,7 +32,7 @@ export default {
         createRoom() {
             MessageBox.prompt('请输入房间名').then(({ value, action }) => {
                 console.log(`value: ${value}  action: ${action}`);
-                this.$webSocket.send(JSON.stringify({ data: { roomName: value, createTime: moment().format('YYYY-MM-DD HH:mm:ss') }, type: 'createRoom' }));
+                this.$webSocket.send(JSON.stringify({ data: { roomName: value }, type: 'createRoom' }));
             });
         },
         goToRoom(roomId) {
