@@ -54,22 +54,34 @@ export default {
             this.drawName = newVal.topicName || newVal.topicPrompt;
             this.gameTime = newVal.gameTime;
             this.roomUserList = newVal.roomUserList;
+
+            // 判断游戏时间, 清空画布
             if (newVal.gameTime === 10) {
-                console.log("newVal: ", newVal);
+                this.$refs.drawContext.draw({ type: 'clear' });
+                console.log("gameInfo newVal: ", newVal);
             }
         },
         showAnswerInfo(newVal, oldVal) {
             if (newVal.showAnswer) {
                 // 弹窗
-                this.$refs.drawContext.draw({ type: 'clear' });
                 MessageBox('本轮答案', this.showAnswerInfo.topicName);
                 this.$store.commit('setShowAnswerInfo', { showAnswer: false });
             }
         },
-        gameOverData(newVal, oldVal) {
+        async gameOverData(newVal, oldVal) {
             if (newVal.showScore) {
                 // 显示所有人的分数
+                console.log("gameOverData newVal: ", newVal);
                 this.$refs.drawContext.draw({ type: 'clear' });
+                let result = await MessageBox({
+                    title: '分数统计',
+                    message: 'test',
+                    closeOnClickModal: false
+                });
+                if (result === "confirm") {
+                    this.$router.push({ name: 'room', params: { roomId: this.roomId } });
+                }
+                console.log("MessageBox result: ", result);
                 this.$store.commit('setGameOverData', { showScore: false });
             }
         }
@@ -86,34 +98,34 @@ export default {
 
 <style>
 .game-spacing {
-    margin-top: 4px;
-    margin-bottom: 4px;
-    float: left;
+  margin-top: 4px;
+  margin-bottom: 4px;
+  float: left;
 }
 
 .game-features {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .game-input {
-    margin: 5px;
-    text-align: left;
-    border: 1px solid #26a2ff;
-    background-color: transparent;
-    color: #000;
-    display: block;
-    width: 100%;
-    font-size: 18px;
-    height: 41px;
-    outline: 0;
-    position: relative;
+  margin: 5px;
+  text-align: left;
+  border: 1px solid #26a2ff;
+  background-color: transparent;
+  color: #000;
+  display: block;
+  width: 100%;
+  font-size: 18px;
+  height: 41px;
+  outline: 0;
+  position: relative;
 }
 
 .game-button {
-    margin: 5px;
-    width: 100px;
+  margin: 5px;
+  width: 100px;
 }
 </style>

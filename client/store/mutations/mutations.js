@@ -10,30 +10,14 @@ export default {
             state.roomList.push(data);
         }
     },
-    addRoomUser(state, users) {
-        if (users instanceof Array) {
-            state.roomUserList.unshift(...users);
-            let roomUserList = [];
-            state.roomUserList.forEach(x => {
-                if (roomUserList.length === 0) {
-                    roomUserList.push(x);
-                } else {
-                    let userIds = roomUserList.map(x => x.userId);
-                    if (userIds.indexOf(x.userId) === -1) {
-                        roomUserList.push(x);
-                    }
-                }
-            });
-
-            state.roomUserList = roomUserList;
-        } else {
-            let userIds = state.roomUserList.map(x => x.userId);
-            if (userIds.indexOf(users.userId) > -1) return;
-            state.roomUserList.push(users);
-        }
+    addRoomUser(state, userList) {
+        state.roomUserList = userList;
     },
     deleteRoomUser(state) {
         state.roomUserList = [];
+    },
+    deleteRoomUserByUserId(state, userId) {
+        state.roomUserList = state.roomUserList.filter(x => x.userId !== userId);
     },
     drawPicture(state, data) {
         state.drawPictureData = data;

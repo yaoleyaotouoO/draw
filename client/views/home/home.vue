@@ -59,21 +59,21 @@ export default {
 
 <style>
 .home-margin-top {
-    margin-top: 50px;
+  margin-top: 50px;
 }
 
 .home-button-margin-top {
-    margin-top: 10px;
+  margin-top: 10px;
 }
 
 .home-background {
-    background-color: #26a2ff;
+  background-color: #26a2ff;
 }
 
 .home-msgbox-wrapper {
-    top: 50%;
-    position: absolute;
-    width: 95%;
+  top: 50%;
+  position: absolute;
+  width: 95%;
 }
 </style>
 

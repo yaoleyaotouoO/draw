@@ -33,8 +33,8 @@ export default {
     async mounted() {
         this.roomId = this.$route.params.roomId;
         localStorage.setItem('roomId', this.roomId);
-        let users = await api.getRoomUserListByRoomId(this.roomId);
-        this.$store.commit('addRoomUser', users);
+        let userList = await api.getRoomUserListByRoomId(this.roomId);
+        this.$store.commit('addRoomUser', userList);
     },
     methods: {
         startGame() {
@@ -47,7 +47,13 @@ export default {
         },
         backToHome() {
             localStorage.removeItem('roomId');
-            api.deleteRoomUserByUserId(Number(localStorage.getItem('userId')));
+            this.$webSocket.send(JSON.stringify({
+                data: {
+                    roomId: this.roomId,
+                    userId: Number(localStorage.getItem('userId'))
+                },
+                type: 'deleteRoomUser'
+            }));
         }
     },
     computed: {

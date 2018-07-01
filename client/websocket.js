@@ -29,10 +29,7 @@ export default (router, store) => {
                 break;
             case 'addRoomUser':
                 if (dataRoomId === roomId) {
-                    store.commit('addRoomUser', {
-                        userId: messageData.data.userId,
-                        userName: messageData.data.userName
-                    });
+                    store.commit('addRoomUser', messageData.data.userList);
                 }
                 break;
             case 'startGame':
@@ -59,6 +56,11 @@ export default (router, store) => {
             case 'gameOver':
                 if (dataRoomId === roomId) {
                     store.commit('setGameOverData', messageData.data);
+                }
+                break;
+            case 'deleteRoomUser':
+                if (dataRoomId === roomId) {
+                    store.commit('deleteRoomUserByUserId', messageData.data.userId);
                 }
                 break;
             default:
