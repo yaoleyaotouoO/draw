@@ -22,6 +22,7 @@
 <script>
 import api from '../../model/model';
 import { mapState } from 'vuex';
+import { Indicator } from 'mint-ui';
 
 export default {
     data() {
@@ -33,7 +34,9 @@ export default {
     async mounted() {
         this.roomId = this.$route.params.roomId;
         localStorage.setItem('roomId', this.roomId);
+        Indicator.open('加载中...');
         let userList = await api.getRoomUserListByRoomId(this.roomId);
+        Indicator.close();
         this.$store.commit('addRoomUser', userList);
     },
     methods: {

@@ -43,10 +43,16 @@ export default {
     getUserInfo() {
         return handleRequest(request.get('/api/getUserInfo'));
     },
-    login(query) {
+    login({ userName, passWord }) {
         return handleRequest(request.post('/api/login', {
-            userName: query.userName,
-            passWord: query.passWord
+            userName: userName,
+            passWord: passWord
+        }));
+    },
+    register({ userName, passWord }) {
+        return handleRequest(request.post('/api/register', {
+            userName: userName,
+            passWord: passWord
         }));
     },
     getRoomList() {

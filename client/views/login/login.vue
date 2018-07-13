@@ -6,11 +6,15 @@
         <button type="submit" class="login-button mint-button mint-button--submit mint-button--large">
             <label class="login-label mint-button-text">登陆</label>
         </button>
+        <button type="button" class="login-button mint-button mint-button--submit mint-button--large" @click="register">
+            <label class="login-label mint-button-text">注册</label>
+        </button>
     </form>
 </template>
 
 <script>
 import api from '../../model/model';
+import { Indicator } from 'mint-ui';
 
 export default {
     data() {
@@ -26,10 +30,12 @@ export default {
     methods: {
         async login(e) {
             e.preventDefault();
+            Indicator.open('加载中...');
             let data = await api.login({
                 userName: this.userName,
                 passWord: this.passWord
             });
+            Indicator.close();
 
             if (data.length > 0) {
                 let rawData = data[0];
@@ -45,8 +51,11 @@ export default {
 
                 this.$router.push('/home');
             } else {
-                this.errorMessage = 'userName or password error!';
+                this.errorMessage = '用户名或者密码错误，请重试!';
             }
+        },
+        register() {
+            this.$router.push('/register');
         }
     }
 }
@@ -54,6 +63,7 @@ export default {
 
 <style>
 .login-button {
+    margin-top: 10px;
     background-color: #26a2ff;
 }
 

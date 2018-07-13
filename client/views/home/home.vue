@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import { MessageBox } from 'mint-ui';
+import { MessageBox, Indicator } from 'mint-ui';
 import api from '../../model/model';
 import { mapState } from 'vuex';
 
@@ -25,7 +25,9 @@ export default {
         }
     },
     async mounted() {
+        Indicator.open('加载中...');
         let data = await api.getRoomList();
+        Indicator.close();
         this.$store.commit('addRoomList', data);
     },
     methods: {
@@ -59,21 +61,21 @@ export default {
 
 <style>
 .home-margin-top {
-  margin-top: 50px;
+    margin-top: 50px;
 }
 
 .home-button-margin-top {
-  margin-top: 10px;
+    margin-top: 10px;
 }
 
 .home-background {
-  background-color: #26a2ff;
+    background-color: #26a2ff;
 }
 
 .home-msgbox-wrapper {
-  top: 50%;
-  position: absolute;
-  width: 95%;
+    top: 50%;
+    position: absolute;
+    width: 95%;
 }
 </style>
 
