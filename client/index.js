@@ -1,13 +1,13 @@
 import Vue from 'vue';
 import App from './app.vue';
-import { Button, Header, Field } from 'mint-ui';
+import ElementUI from 'element-ui';
 import VueX from 'vuex';
 import VueRouter from 'vue-router';
 import createRouter from './router/router';
 import createStore from './store/store';
 import createWebSocket from './websocket';
 
-import 'mint-ui/lib/style.css';
+import 'element-ui/lib/theme-chalk/index.css';
 import './assets/styles/iconfont/iconfont.js';
 import './assets/styles/global.css';
 

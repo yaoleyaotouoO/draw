@@ -4,15 +4,12 @@
         "es2015"
     ],
     "plugins": [
-        "transform-object-rest-spread",
-        [
-            "component",
-            [
-                {
-                    "libraryName": "mint-ui",
-                    "style": true
-                }
-            ]
-        ]
+    [
+      "component",
+      {
+        "libraryName": "element-ui",
+        "styleLibraryName": "theme-chalk"
+      }
     ]
+  ]
 }
