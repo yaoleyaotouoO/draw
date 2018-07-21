@@ -1,22 +1,26 @@
 <template>
-    <form @submit="save">
-        <mt-field label="用户名" placeholder="请输入用户名" v-model="userName"></mt-field>
-        <mt-field type="password" label="密码" placeholder="请输入密码" v-model="passWord"></mt-field>
-        <mt-field type="password" label="密码" placeholder="请再次确定密码" v-model="confirmPassWord"></mt-field>
-        <label v-show="errorMessage" style="color: red;">{{ errorMessage }}</label>
-        <button type="submit" class="register-button mint-button mint-button--submit mint-button--large">
-            <label class="register-label mint-button-text">保存</label>
-        </button>
-        <button type="button" class="register-button mint-button mint-button--submit mint-button--large" @click="back">
-            <label class="register-label mint-button-text">返回</label>
-        </button>
-    </form>
+    <el-form ref="form" label-width="80px" style="width:460px">
+        <el-form-item label="用户名">
+            <el-input v-model="userName"></el-input>
+        </el-form-item>
+        <el-form-item label="密码">
+            <el-input type="password" v-model="passWord"></el-input>
+        </el-form-item>
+        <el-form-item label="确认密码">
+            <el-input type="password" v-model="confirmPassWord"></el-input>
+        </el-form-item>
+        <el-form-item v-show="errorMessage">
+            <label style="color: red;">{{ errorMessage }}</label>
+        </el-form-item>
+        <el-form-item>
+            <el-button type="primary" @click="save">保存</el-button>
+            <el-button type="primary" @click="back">返回</el-button>
+        </el-form-item>
+    </el-form>
 </template>
 
 <script>
 import api from '../../model/model';
-import { Indicator } from 'mint-ui';
-
 export default {
     data() {
         return {
@@ -36,12 +40,12 @@ export default {
                 return;
             }
 
-            Indicator.open('加载中...');
+            let loadingInstance = this.$loading();
             let data = await api.register({
                 userName: this.userName,
                 passWord: this.passWord
             });
-            Indicator.close();
+            loadingInstance.close();
             if (!data) {
                 this.errorMessage = '账号已存在，请换个账号!';
                 return;
@@ -58,12 +62,12 @@ export default {
 
 <style>
 .register-button {
-    margin-top: 10px;
-    background-color: #26a2ff;
+  margin-top: 10px;
+  background-color: #409EFF;
 }
 
 .register-label {
-    color: #fff;
+  color: #fff;
 }
 </style>
 

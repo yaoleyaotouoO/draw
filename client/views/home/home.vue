@@ -1,21 +1,81 @@
 <template>
-    <div>
+    <el-container>
+        <el-header class="draw-home-header" height="100px">
+            <img src="../../assets/images/profile.jpg" class="draw-round-icon">
+            <span class="draw-home-name">摇了摇头oO</span>
+        </el-header>
+        <el-main>
+            <el-row>
+                <el-col :span="8">
+                    <div class="draw-home-play-div">
+                        <i class="draw-home-play el-icon-tickets"></i>
+                        <p>玩法</p>
+                    </div>
+                </el-col>
+                <el-col :span="8">
+                    <div class="draw-home-play-div">
+                        <i class="draw-home-play el-icon-minus"></i>
+                        <p>排行榜</p>
+                    </div>
+                </el-col>
+                <el-col :span="8">
+                    <div class="draw-home-play-div">
+                        <i class="draw-home-play el-icon-date"></i>
+                        <p>公告</p>
+                    </div>
+                </el-col>
+            </el-row>
+            <el-card class="box-card draw-home-box-card">
+                <el-row>
+                    <el-col :span="14">
+                        <img src="../../assets/images/profile.jpg" class="draw-home-box-card-icon">
+                    </el-col>
+                    <el-col :span="10">
+                        <p class="draw-home-card-font-color">创建房间</p>
+                        <p class="draw-home-card-font-color">约好友一起来画</p>
+                        <a href="javasrcipt:void(0)" class="draw-home-card-font-color" @click="createRoom">开始创建 ></a>
+                    </el-col>
+                </el-row>
+            </el-card>
+            <el-card class="box-card draw-home-box-card">
+                <el-row>
+                    <el-col :span="14">
+                        <p class="draw-home-card-font-color">自由匹配</p>
+                        <p class="draw-home-card-font-color">灵魂画手进阶之路</p>
+                        <a href="javasrcipt:void(0)" class="draw-home-card-font-color">立即开始 ></a>
+                    </el-col>
+                    <el-col :span="10">
+                        <img src="../../assets/images/profile.jpg" class="draw-home-box-card-icon">
+                    </el-col>
+                </el-row>
+            </el-card>
+            <el-row class="draw-home-room-row">
+                <el-col :span="12">
+                    <el-button type="primary" class="draw-home-room-row-button" icon="el-icon-search">查找房间</el-button>
+                </el-col>
+                <el-col :span="12">
+                    <el-button type="primary" class="draw-home-room-row-list-button" icon="el-icon-menu">房间列表</el-button>
+                </el-col>
+            </el-row>
+        </el-main>
+    </el-container>
+
+    <!-- <div>
         <mt-header class="home-background" fixed title="主页">
             <router-link to="/login" slot="left">
-                <mt-button icon="back">返回</mt-button>
+                <el-button icon="back">返回</el-button>
             </router-link>
         </mt-header>
         <div class="home-margin-top">
-            <mt-button class="home-button-margin-top" type='default' size='large' v-for="room in roomList" :key="room.id" @click="goToRoom(room.id)">{{room.name}}</mt-button>
+            <el-button class="home-button-margin-top" type='default' size='large' v-for="room in roomList" :key="room.id" @click="goToRoom(room.id)">{{room.name}}</el-button>
         </div>
         <div class="home-msgbox-wrapper">
-            <mt-button type='primary' size='large' @click="createRoom">创建房间</mt-button>
-        </div>
-    </div>
+            <el-button type='primary' size='large' @click="createRoom">创建房间</el-button>
+        </div
+    </div> -->
 </template>
 
 <script>
-import { MessageBox, Indicator } from 'mint-ui';
 import api from '../../model/model';
 import { mapState } from 'vuex';
 
@@ -25,15 +85,18 @@ export default {
         }
     },
     async mounted() {
-        Indicator.open('加载中...');
+        let loadingInstance = this.$loading();
         let data = await api.getRoomList();
-        Indicator.close();
+        loadingInstance.close();
         this.$store.commit('addRoomList', data);
     },
     methods: {
         createRoom() {
-            MessageBox.prompt('请输入房间名').then(({ value, action }) => {
-                console.log(`value: ${value}  action: ${action}`);
+            this.$prompt('请输入房间名', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消'
+            }).then(({ value }) => {
+                console.log(`value: ${value}`);
                 this.$webSocket.send(JSON.stringify({ data: { roomName: value }, type: 'createRoom' }));
             });
         },
@@ -60,22 +123,93 @@ export default {
 </script>
 
 <style>
+.el-header,
+.el-footer {
+  color: white;
+  text-align: center;
+  line-height: 60px;
+}
+
+.draw-round-icon {
+  padding-top: 10px;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  float: left;
+}
+
+.draw-home-header {
+  background-color: #409eff;
+}
+
+.draw-home-name {
+  float: left;
+  color: black;
+  padding-left: 15px;
+  padding-top: 10px;
+}
+
+.draw-home-play-div {
+  text-align: center;
+}
+
+.draw-home-play {
+  font-size: 50px;
+}
+
+p {
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+
+.draw-home-box-card {
+  margin-top: 10px;
+  height: 100px;
+  background-color: #409eff;
+}
+
+.draw-home-box-card-icon {
+  width: 80px;
+  height: 80px;
+  float: left;
+}
+
+.draw-home-card-font-color {
+  color: white;
+  padding-top: 3px;
+}
+
+.draw-home-room-info {
+  background-color: #409eff;
+}
+
+.draw-home-room-row {
+  margin-top: 10px;
+}
+
+.draw-home-room-row-button {
+  height: 60px;
+  width: 95%;
+}
+
+.draw-home-room-row-list-button {
+  height: 60px;
+  width: 95%;
+  float: right;
+}
+
 .home-margin-top {
-    margin-top: 50px;
+  margin-top: 50px;
 }
 
 .home-button-margin-top {
-    margin-top: 10px;
-}
-
-.home-background {
-    background-color: #26a2ff;
+  margin-top: 10px;
 }
 
 .home-msgbox-wrapper {
-    top: 50%;
-    position: absolute;
-    width: 95%;
+  top: 50%;
+  position: absolute;
+  width: 95%;
 }
 </style>
 

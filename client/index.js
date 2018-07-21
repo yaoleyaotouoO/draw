@@ -13,10 +13,7 @@ import './assets/styles/global.css';
 
 Vue.use(VueRouter);
 Vue.use(VueX);
-//Vue.use(Mint);
-Vue.component(Button.name, Button);
-Vue.component(Header.name, Header);
-Vue.component(Field.name, Field);
+Vue.use(ElementUI);
 
 const router = createRouter();
 const store = createStore();

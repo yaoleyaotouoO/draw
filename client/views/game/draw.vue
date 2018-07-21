@@ -26,7 +26,6 @@
 
 <script>
 import { mapState } from 'vuex';
-import { MessageBox } from 'mint-ui';
 
 export default {
     props: {
@@ -120,11 +119,11 @@ export default {
             this.draw({ type: 'end' });
         },
         async clear() {
-            let result = await MessageBox({
-                title: '提示',
-                message: '确定执行清除操作?',
-                showCancelButton: true
+            let result = await this.$alert('确定执行清除操作?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消'
             });
+            console.log(`result: ${result}`)
             if (result !== 'confirm') return;
 
             this.draw({ type: 'clear' });
@@ -148,7 +147,7 @@ export default {
     },
     watch: {
         drawPictureData(newVal, oldVal) {
-        //    console.log(`new: ${JSON.stringify(newVal)}  old: ${JSON.stringify(oldVal)}`)
+            //    console.log(`new: ${JSON.stringify(newVal)}  old: ${JSON.stringify(oldVal)}`)
             if (this.canDraw) return;
 
             this.draw(newVal);
@@ -172,7 +171,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #26a2ff;
+  background: #409EFF;
 }
 
 .draw-icon-special {

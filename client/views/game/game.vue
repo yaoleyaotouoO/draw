@@ -16,7 +16,6 @@
 import Draw from './draw.vue';
 import api from '../../model/model';
 import { mapState } from 'vuex';
-import { MessageBox } from 'mint-ui';
 
 export default {
     components: { Draw },
@@ -64,7 +63,12 @@ export default {
         showAnswerInfo(newVal, oldVal) {
             if (newVal.showAnswer) {
                 // 弹窗
-                MessageBox('本轮答案', this.showAnswerInfo.topicName);
+                this.$alert(this.showAnswerInfo.topicName, '本轮答案', {
+                    confirmButtonText: '确定',
+                    callback: action => {
+                        console.log("action: ", action);
+                    }
+                });
                 this.$store.commit('setShowAnswerInfo', { showAnswer: false });
             }
         },
@@ -73,11 +77,11 @@ export default {
                 // 显示所有人的分数
                 console.log("gameOverData newVal: ", newVal);
                 this.$refs.drawContext.draw({ type: 'clear' });
-                let result = await MessageBox({
-                    title: '分数统计',
-                    message: 'test',
-                    closeOnClickModal: false
+
+                let result = await this.$alert('test', '分数统计', {
+                    confirmButtonText: '确定'
                 });
+                console.log(`result: ${result}`)
                 if (result === "confirm") {
                     this.$router.push({ name: 'room', params: { roomId: this.roomId } });
                 }
@@ -113,7 +117,7 @@ export default {
 .game-input {
   margin: 5px;
   text-align: left;
-  border: 1px solid #26a2ff;
+  border: 1px solid #409EFF;
   background-color: transparent;
   color: #000;
   display: block;
