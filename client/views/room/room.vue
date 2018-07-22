@@ -1,5 +1,73 @@
 <template>
-    <div>
+    <el-container>
+        <!-- <div>
+            <div style='position:absolute; z-index:2; width:300px; height:400px; left:0px; top:0px;background-color:#409eff;'></div>
+            <div style='position:absolute; z-index:3; width:400px; height:300px; left:0px; top:0px;background-color:red;'></div>
+        </div> -->
+        <el-header height="auto" style="padding:0;">
+            <div class="draw-room-padding"></div>
+            <el-card class="box-card draw-room-card">
+                <img src="../../assets/images/profile.jpg" class="draw-room-card-photo">
+                <p class="draw-room-name">摇了摇头oO的房间</p>
+            </el-card>
+        </el-header>
+        <el-main class="draw-room-main">
+            <p class="draw-room-prompt"> 小提示: 房间满2人，房主即可开始游戏!</p>
+            <el-row :gutter="20" class="draw-room-el-row" style="margin-left: 0px;margin-right: 0px;">
+                <el-col :span="4" class="draw-room-user-info-col">
+                    <div class="draw-room-user-info">
+                        <p class="draw-room-user-status-name">房主</p>
+                        <img src="../../assets/images/profile.jpg" class="draw-room-user-icon">
+                        <p class="draw-room-user-name">摇了摇头oO</p>
+                    </div>
+                </el-col>
+                <el-col :span="4" class="draw-room-user-info-col">
+                    <div class="draw-room-user-info">
+                        <p class="draw-room-user-status-name">房主</p>
+                        <img src="../../assets/images/profile.jpg" class="draw-room-user-icon">
+                        <p class="draw-room-user-name">摇了摇头oO</p>
+                    </div>
+                </el-col>
+                <el-col :span="4" class="draw-room-user-info-col">
+                    <div class="draw-room-user-info">
+                        <p class="draw-room-user-status-name">房主</p>
+                        <img src="../../assets/images/profile.jpg" class="draw-room-user-icon">
+                        <p class="draw-room-user-name">摇了摇头oO</p>
+                    </div>
+                </el-col>
+                <el-col :span="4" class="draw-room-user-info-col">
+                    <div class="draw-room-user-info">
+                        <p class="draw-room-user-status-name">房主</p>
+                        <img src="../../assets/images/profile.jpg" class="draw-room-user-icon">
+                        <p class="draw-room-user-name">摇了摇头oO</p>
+                    </div>
+                </el-col>
+                <el-col :span="4" class="draw-room-user-info-col">
+                    <div class="draw-room-user-info">
+                        <p class="draw-room-user-status-name">房主</p>
+                        <img src="../../assets/images/profile.jpg" class="draw-room-user-icon">
+                        <p class="draw-room-user-name">摇了摇头oO</p>
+                    </div>
+                </el-col>
+                <el-col :span="4" class="draw-room-user-info-col">
+                    <div class="draw-room-user-info">
+                        <p class="draw-room-user-status-name">房主</p>
+                        <img src="../../assets/images/profile.jpg" class="draw-room-user-icon">
+                        <p class="draw-room-user-name">摇了摇头oO</p>
+                    </div>
+                </el-col>
+            </el-row>
+            <el-row class="draw-room-button-row">
+                <el-col :span="12">
+                    <el-button type="primary" class="draw-room-button-row-ready">邀请好友</el-button>
+                </el-col>
+                <el-col :span="12">
+                    <el-button type="primary" class="draw-room-button-row-list-button">开始</el-button>
+                </el-col>
+            </el-row>
+        </el-main>
+    </el-container>
+    <!-- <div>
         <el-header fixed :title="myUserName + '的房间'">
             <router-link to="/home" slot="left">
                 <el-button icon="back" @click="backToHome">返回</el-button>
@@ -16,7 +84,7 @@
             <el-button type='primary' :disabled="!canStart" size='large' v-if="canStartGame" @click="startGame">{{canStart ? '开始游戏' : '大于2人才能开始游戏'}}</el-button>
             <el-button type='primary' v-else disabled size='large'>只有房主才能开始游戏</el-button>
         </div>
-    </div>
+    </div> -->
 </template>
 
 <script>
@@ -84,6 +152,100 @@ export default {
 </script>
 
 <style>
+p {
+  margin: 0;
+}
+
+.draw-room-padding {
+  position: absolute;
+  z-index: -1;
+  width: 100%;
+  height: 20%;
+  left: 0px;
+  top: 0px;
+  background-color: #409eff;
+}
+
+.draw-room-card {
+  position: relative;
+  margin: 20 20 20 20;
+  border: 0;
+  margin-bottom: 0px;
+}
+
+.draw-room-card,
+.el-card__body {
+  padding: 0;
+}
+
+.draw-room-card-photo {
+  width: 100%;
+  height: 200px;
+}
+
+.draw-room-name {
+  margin: 10px;
+}
+
+.draw-room-main {
+  padding: 0px;
+}
+
+.draw-room-prompt {
+  margin: 10px;
+  text-align: center;
+}
+
+.draw-room-user-info {
+  text-align: center;
+}
+
+.draw-room-user-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+.draw-room-user-name {
+    margin-top: 5px;
+    text-overflow: ellipsis;
+    overflow:hidden;
+    white-space:nowrap;
+    width: 40px;
+    background:#ccc;
+}
+
+.draw-room-user-status-name {
+    margin-bottom: 5px;
+    text-overflow: ellipsis;
+    overflow:hidden;
+    white-space:nowrap;
+    width: 40px;
+    background:#409eff;
+}
+
+.draw-room-button-row {
+  margin-top: 20px;
+  padding: 0 20 0 20;
+}
+
+.draw-room-button-row-ready {
+  height: 40px;
+  width: 95%;
+}
+
+.draw-room-button-row-list-button {
+  height: 40px;
+  width: 95%;
+  float: right;
+}
+
+.draw-room-el-row {
+  padding-top: 10px;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
 .room-margin-top {
   margin-top: 50px;
 }

@@ -67,5 +67,8 @@ export default {
     },
     deleteRoomUserByUserId(userId) {
         return handleRequest(request.delete(`/api/${userId}/deleteRoomUserByUserId`));
+    },
+    createRoom(roomName) {
+        return handleRequest(request.post('/api/createRoom', { roomName: roomName }));
     }
 }

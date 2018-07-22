@@ -51,7 +51,7 @@
             </el-card>
             <el-row class="draw-home-room-row">
                 <el-col :span="12">
-                    <el-button type="primary" class="draw-home-room-row-button" icon="el-icon-search">查找房间</el-button>
+                    <el-button type="primary" class="draw-home-room-row-button" icon="el-icon-search" @click="findRoom">查找房间</el-button>
                 </el-col>
                 <el-col :span="12">
                     <el-button type="primary" class="draw-home-room-row-list-button" icon="el-icon-menu">房间列表</el-button>
@@ -59,20 +59,6 @@
             </el-row>
         </el-main>
     </el-container>
-
-    <!-- <div>
-        <mt-header class="home-background" fixed title="主页">
-            <router-link to="/login" slot="left">
-                <el-button icon="back">返回</el-button>
-            </router-link>
-        </mt-header>
-        <div class="home-margin-top">
-            <el-button class="home-button-margin-top" type='default' size='large' v-for="room in roomList" :key="room.id" @click="goToRoom(room.id)">{{room.name}}</el-button>
-        </div>
-        <div class="home-msgbox-wrapper">
-            <el-button type='primary' size='large' @click="createRoom">创建房间</el-button>
-        </div
-    </div> -->
 </template>
 
 <script>
@@ -95,9 +81,25 @@ export default {
             this.$prompt('请输入房间名', '提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消'
-            }).then(({ value }) => {
-                console.log(`value: ${value}`);
-                this.$webSocket.send(JSON.stringify({ data: { roomName: value }, type: 'createRoom' }));
+            }).then(async ({ value }) => {
+                if (!value) {
+                    this.$message({
+                        message: '请输入有效的房间名',
+                        type: 'warning'
+                    });
+                    return;
+                }
+
+                let roomId = await api.createRoom(value);
+                if (!roomId) {
+                    this.$message({
+                        message: '此房间名已经存在，请重新创建',
+                        type: 'warning'
+                    });
+                    return;
+                }
+                // 跳转到房间内
+                this.$router.push({ name: 'room', params: { roomId } });
             });
         },
         goToRoom(roomId) {
@@ -111,7 +113,15 @@ export default {
             }));
 
             this.$store.commit('deleteRoomUser');
-            this.$router.push({ name: 'room', params: { roomId: roomId } });
+            this.$router.push({ name: 'room', params: { roomId } });
+        },
+        findRoom() {
+            this.$prompt('请输入需要查找的房间名', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消'
+            }).then(({ value }) => {
+                console.log(`value: ${value}`);
+            });
         }
     },
     computed: {
