@@ -1,15 +1,17 @@
 <template>
-    <div>
-        <mt-header>
-            <div slot="left">{{canDraw ? '我画：': '提示：'}}{{drawName}}</div>
-            <div slot="right">{{ gameTime}}</div>
-        </mt-header>
-        <draw ref="drawContext" :room-id="roomId" :can-draw="canDraw"></draw>
-        <div v-if="!canDraw" class="game-features">
-            <input placeholder="输入答案" class="game-input" v-model="drawAnswer"></input>
-            <mt-button class="game-button" size="normal" type="primary" @click="submitAnswer">提交</mt-button>
-        </div>
-    </div>
+    <el-container>
+        <el-header class="draw-game-el-header" height="30px">
+            <div class="draw-game-header-draw-name">{{canDraw ? '我画：': '提示：'}}{{drawName}}</div>
+            <div class="draw-game-header-game-time">{{gameTime}}</div>
+        </el-header>
+        <el-main class="draw-game-el-main">
+            <draw ref="drawContext" :room-id="roomId" :can-draw="canDraw"></draw>
+            <div v-if="!canDraw" class="game-features">
+                <input placeholder="输入答案" class="game-input" v-model="drawAnswer"></input>
+                <el-button class="game-button" size="normal" type="primary" @click="submitAnswer">提交</el-button>
+            </div>
+        </el-main>
+    </el-container>
 </template>
 
 <script>
@@ -101,35 +103,54 @@ export default {
 </script>
 
 <style>
+.draw-game-el-main {
+    padding: 0px;
+}
+
+.draw-game-el-header {
+    padding: 0 10px;
+    background-color: #409eff;
+}
+
+.draw-game-header-draw-name {
+    color: white;
+    float: left;
+}
+
+.draw-game-header-game-time {
+    color: white;
+    float: right;
+}
+
 .game-spacing {
-  margin-top: 4px;
-  margin-bottom: 4px;
-  float: left;
+    margin-top: 4px;
+    margin-bottom: 4px;
+    float: left;
 }
 
 .game-features {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .game-input {
-  margin: 5px;
-  text-align: left;
-  border: 1px solid #409EFF;
-  background-color: transparent;
-  color: #000;
-  display: block;
-  width: 100%;
-  font-size: 18px;
-  height: 41px;
-  outline: 0;
-  position: relative;
+    margin: 5px;
+    text-align: left;
+    border: 1px solid #409EFF;
+    background-color: transparent;
+    color: #000;
+    display: block;
+    width: 100%;
+    font-size: 18px;
+    height: 41px;
+    outline: 0;
+    position: relative;
 }
 
 .game-button {
-  margin: 5px;
-  width: 100px;
+    margin: 5px;
+    width: 100px;
 }
 </style>

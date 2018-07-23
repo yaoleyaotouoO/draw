@@ -71,56 +71,63 @@ export default {
         }
     },
     async mounted() {
-        let loadingInstance = this.$loading();
-        let data = await api.getRoomList();
-        loadingInstance.close();
-        this.$store.commit('addRoomList', data);
+        // let loadingInstance = this.$loading();
+        // let data = await api.getRoomList();
+        // loadingInstance.close();
+        // this.$store.commit('addRoomList', data);
     },
     methods: {
-        createRoom() {
-            this.$prompt('请输入房间名', '提示', {
+        async createRoom() {
+            let { value, action } = await this.$prompt('请输入房间名', '提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消'
-            }).then(async ({ value }) => {
-                if (!value) {
-                    this.$message({
-                        message: '请输入有效的房间名',
-                        type: 'warning'
-                    });
-                    return;
-                }
-
-                let roomId = await api.createRoom(value);
-                if (!roomId) {
-                    this.$message({
-                        message: '此房间名已经存在，请重新创建',
-                        type: 'warning'
-                    });
-                    return;
-                }
-                // 跳转到房间内
-                this.$router.push({ name: 'room', params: { roomId } });
             });
-        },
-        goToRoom(roomId) {
-            this.$webSocket.send(JSON.stringify({
-                data: {
-                    userId: Number(localStorage.getItem('userId')),
-                    userName: localStorage.getItem('userName'),
-                    roomId: roomId
-                },
-                type: 'addRoomUser'
-            }));
+            if (!value) {
+                this.$message({
+                    message: '请输入有效的房间名',
+                    type: 'warning'
+                });
+                return;
+            }
 
-            this.$store.commit('deleteRoomUser');
+            let loadingInstance = this.$loading();
+            let roomId = await api.createRoom(value);
+            loadingInstance.close();
+            if (!roomId) {
+                this.$message({
+                    message: '此房间名已经存在，请重新创建',
+                    type: 'warning'
+                });
+                return;
+            }
+
             this.$router.push({ name: 'room', params: { roomId } });
         },
-        findRoom() {
-            this.$prompt('请输入需要查找的房间名', '提示', {
+        async findRoom() {
+            let { value, action } = await this.$prompt('请输入需要查找的房间名', '提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消'
-            }).then(({ value }) => {
-                console.log(`value: ${value}`);
+            });
+            if (!value) {
+                this.$message({
+                    message: '搜索的房间不存在',
+                    type: 'warning'
+                });
+                return;
+            }
+
+            let loadingInstance = this.$loading();
+            let result = await api.findRoom(value);
+            loadingInstance.close();
+            let roomId = result[0] && result[0].id;
+            if (roomId) {
+                this.$router.push({ name: 'room', params: { roomId } });
+                return;
+            }
+
+            this.$message({
+                message: '搜索的房间不存在',
+                type: 'warning'
             });
         }
     },
@@ -135,91 +142,91 @@ export default {
 <style>
 .el-header,
 .el-footer {
-  color: white;
-  text-align: center;
-  line-height: 60px;
+    color: white;
+    text-align: center;
+    line-height: 60px;
 }
 
 .draw-round-icon {
-  padding-top: 10px;
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  float: left;
+    padding-top: 10px;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    float: left;
 }
 
 .draw-home-header {
-  background-color: #409eff;
+    background-color: #409eff;
 }
 
 .draw-home-name {
-  float: left;
-  color: black;
-  padding-left: 15px;
-  padding-top: 10px;
+    float: left;
+    color: black;
+    padding-left: 15px;
+    padding-top: 10px;
 }
 
 .draw-home-play-div {
-  text-align: center;
+    text-align: center;
 }
 
 .draw-home-play {
-  font-size: 50px;
+    font-size: 50px;
 }
 
 p {
-  margin-top: 0px;
-  margin-bottom: 0px;
+    margin-top: 0px;
+    margin-bottom: 0px;
 }
 
 .draw-home-box-card {
-  margin-top: 10px;
-  height: 100px;
-  background-color: #409eff;
+    margin-top: 10px;
+    height: 100px;
+    background-color: #409eff;
 }
 
 .draw-home-box-card-icon {
-  width: 80px;
-  height: 80px;
-  float: left;
+    width: 80px;
+    height: 80px;
+    float: left;
 }
 
 .draw-home-card-font-color {
-  color: white;
-  padding-top: 3px;
+    color: white;
+    padding-top: 3px;
 }
 
 .draw-home-room-info {
-  background-color: #409eff;
+    background-color: #409eff;
 }
 
 .draw-home-room-row {
-  margin-top: 10px;
+    margin-top: 10px;
 }
 
 .draw-home-room-row-button {
-  height: 60px;
-  width: 95%;
+    height: 60px;
+    width: 95%;
 }
 
 .draw-home-room-row-list-button {
-  height: 60px;
-  width: 95%;
-  float: right;
+    height: 60px;
+    width: 95%;
+    float: right;
 }
 
 .home-margin-top {
-  margin-top: 50px;
+    margin-top: 50px;
 }
 
 .home-button-margin-top {
-  margin-top: 10px;
+    margin-top: 10px;
 }
 
 .home-msgbox-wrapper {
-  top: 50%;
-  position: absolute;
-  width: 95%;
+    top: 50%;
+    position: absolute;
+    width: 95%;
 }
 </style>
 
