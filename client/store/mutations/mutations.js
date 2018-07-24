@@ -10,7 +10,7 @@ export default {
             state.roomList.push(data);
         }
     },
-    addRoomUser(state, userList) {
+    changedRoomUser(state, userList) {
         state.roomUserList = userList;
     },
     deleteRoomUser(state) {

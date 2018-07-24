@@ -23,45 +23,34 @@ export default (router, store) => {
         let roomId = localStorage.getItem('roomId') && localStorage.getItem('roomId').toString();
         let userId = localStorage.getItem('userId') && Number(localStorage.getItem('userId'));
         let dataRoomId = messageData.data.roomId.toString();
+        if (dataRoomId !== roomId) {
+            return;
+        }
+
         switch (messageData.type) {
             case 'addRoom':
                 store.commit('addRoomList', messageData.data);
                 break;
-            case 'addRoomUser':
-                if (dataRoomId === roomId) {
-                    store.commit('addRoomUser', messageData.data.userList);
-                }
+            case 'changedRoomUser':
+                store.commit('changedRoomUser', messageData.data.userList);
                 break;
             case 'startGame':
-                if (dataRoomId === roomId) {
-                    router.push({ name: 'game', params: { roomId } })
-                }
+                router.push({ name: 'game', params: { roomId } });
                 break;
             case 'drawPicture':
-                if (dataRoomId === roomId) {
-                    console.log('data: ', messageData.data);
-                    store.commit('drawPicture', messageData.data);
-                }
+                store.commit('drawPicture', messageData.data);
                 break;
             case 'gameInfo':
-                if (dataRoomId === roomId) {
-                    store.commit('setGameInfo', messageData.data);
-                }
+                store.commit('setGameInfo', messageData.data);
                 break;
             case 'showAnswer':
-                if (dataRoomId === roomId) {
-                    store.commit('setShowAnswerInfo', messageData.data);
-                }
+                store.commit('setShowAnswerInfo', messageData.data);
                 break;
             case 'gameOver':
-                if (dataRoomId === roomId) {
-                    store.commit('setGameOverData', messageData.data);
-                }
+                store.commit('setGameOverData', messageData.data);
                 break;
             case 'deleteRoomUser':
-                if (dataRoomId === roomId) {
-                    store.commit('deleteRoomUserByUserId', messageData.data.userId);
-                }
+                store.commit('deleteRoomUserByUserId', messageData.data.userId);
                 break;
             default:
                 console.warn('webSocket onmessage not type!');

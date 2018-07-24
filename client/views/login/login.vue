@@ -1,5 +1,5 @@
 <template>
-    <el-form ref="form" label-width="80px" style="width:460px">
+    <el-form ref="form" label-width="80px" class="draw-login-el-form">
         <el-form-item label="用户名">
             <el-input v-model="userName"></el-input>
         </el-form-item>
@@ -65,13 +65,18 @@ export default {
 </script>
 
 <style>
+.draw-login-el-form {
+    width: 90%;
+    margin-top: 30px;
+}
+
 .login-button {
-  margin-top: 10px;
-  background-color: #409EFF;
+    margin-top: 10px;
+    background-color: #409EFF;
 }
 
 .login-label {
-  color: #fff;
+    color: #fff;
 }
 </style>
 

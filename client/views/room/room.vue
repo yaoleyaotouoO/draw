@@ -49,18 +49,14 @@ export default {
     async mounted() {
         this.roomId = this.$route.params.roomId;
         localStorage.setItem('roomId', this.roomId);
-        this.$webSocket.send(JSON.stringify({
+        this.$webSocket.readyState === 1 && this.$webSocket.send(JSON.stringify({
             data: {
                 userId: Number(localStorage.getItem('userId')),
                 userName: localStorage.getItem('userName'),
                 roomId: this.roomId
             },
-            type: 'addRoomUser'
+            type: 'changedRoomUser'
         }));
-        // let loadingInstance = this.$loading();
-        // let userList = await api.getRoomUserListByRoomId(this.roomId);
-        // loadingInstance.close();
-        // this.$store.commit('addRoomUser', userList);
     },
     methods: {
         startGame() {
@@ -87,6 +83,7 @@ export default {
             return this.showUserList.some(x => (x.userId === Number(localStorage.getItem('userId')) && x.seatId === 0));
         },
         showUserList() {
+            console.log("this.roomUserList: ", this.roomUserList);
             return [0, 0, 0, 0, 0, 0].map((_, i) => {
                 let data = {
                     seatId: i,
@@ -112,6 +109,10 @@ export default {
 <style>
 p {
     margin: 0;
+}
+
+.box-card, .el-card__body{
+    padding: 0px;
 }
 
 .draw-room-padding {
