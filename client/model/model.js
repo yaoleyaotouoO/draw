@@ -69,6 +69,6 @@ export default {
         return handleRequest(request.post('/api/createRoom', { roomName }));
     },
     findRoom(roomName) {
-        return handleRequest(request.get('api/findRoom', { params: { roomName } }));
+        return handleRequest(request.get('/api/findRoom', { params: { roomName } }));
     }
 }
