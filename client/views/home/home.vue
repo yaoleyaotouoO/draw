@@ -140,13 +140,6 @@ export default {
 </script>
 
 <style>
-.el-header,
-.el-footer {
-    color: white;
-    text-align: center;
-    line-height: 60px;
-}
-
 .draw-round-icon {
     padding-top: 10px;
     width: 80px;
