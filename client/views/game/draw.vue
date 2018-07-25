@@ -1,10 +1,21 @@
 <template>
     <div>
-        <canvas v-if="canDraw" ref='canvasDom' width='400' height='300' @touchstart='start' @touchmove='move' @touchend='end'></canvas>
-        <canvas v-else ref='canvasDom' width='400' height='300'></canvas>
+        <el-row class="draw-draw-el-cl-row-top">
+            <el-col class="draw-draw-el-col-left" :span="1">
+            </el-col>
+            <el-col class="draw-draw-el-col-center" :span="22">
+                <div class="draw-draw-canvas-info">
+                    <canvas v-if="canDraw" ref='canvasDom' :width="canvasWidth" :height="canvasHeight" @touchstart='start' @touchmove='move' @touchend='end'></canvas>
+                    <canvas v-else ref='canvasDom' :width="canvasWidth" :height="canvasHeight"></canvas>
+                </div>
+            </el-col>
+            <el-col class="draw-draw-el-col-right" :span="1">
+                <div></div>
+            </el-col>
+        </el-row>
 
-        <!-- <div class="draw-features" v-if="canDraw"> -->
-            <div class="draw-features">
+        <!-- <div class="draw-draw-artboard-bottom" v-if="canDraw"> -->
+        <div class="draw-draw-artboard-bottom">
             <svg class="draw-icon icon" aria-hidden="true" @click="changePenColor">
                 <use xlink:href="#icon-color-filling" :style="penColor"></use>
             </svg>
@@ -22,7 +33,7 @@
                 <use xlink:href="#icon-delete" style="color:#FCFCFC;"></use>
             </svg>
         </div>
-    </div>  
+    </div>
 </template>
 
 <script>
@@ -36,6 +47,8 @@ export default {
     data() {
         return {
             ctx: '',
+            canvasWidth: 0,
+            canvasHeight: 0,
             offsetLeft: 0,
             offsetTop: 0,
             penColor: '',
@@ -52,16 +65,36 @@ export default {
     },
     mounted() {
         let canvasDom = this.$refs.canvasDom;
-        this.offsetLeft = canvasDom.offsetLeft;
-        this.offsetTop = canvasDom.offsetTop;
+        let parentDom = canvasDom.parentNode;
+        this.canvasWidth = parentDom.offsetWidth;
+        this.canvasHeight = parentDom.offsetHeight;
+
+        let { offsetLeft, offsetTop } = this.getOffset(canvasDom);
+        this.offsetLeft = offsetLeft;
+        this.offsetTop = offsetTop;
+
         var ctx = canvasDom.getContext('2d');
         this.ctx = ctx;
+
         this.penColor = this.penColorList[0];
         this.ctx.strokeStyle = this.penColor.color;
         this.penWidth = this.penWidthList[0];
         this.ctx.lineWidth = this.penWidth;
     },
     methods: {
+        // 获取任意元素的offsetLeft/offsetTop值
+        getOffset(obj) {
+            var arr = []
+            var offsetL = 0
+            var offsetT = 0
+            while (obj != window.document.body && obj != null) {
+                offsetL += obj.offsetLeft
+                offsetT += obj.offsetTop
+                obj = obj.offsetParent
+            }
+
+            return { offsetLeft: offsetL, offsetTop: offsetT }
+        },
         draw(data) {
             console.log("draw data: ", data);
             switch (data.type) {
@@ -78,7 +111,7 @@ export default {
                     this.ctx.stroke();
                     break;
                 case 'clear':
-                    this.ctx.clearRect(0, 0, 400, 300);
+                    this.ctx.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
                     break;
                 case 'changePenColor':
                     this.ctx.strokeStyle = data.data;
@@ -167,12 +200,41 @@ body {
   margin: 0px;
 }
 
-.draw-features {
+.draw-draw-artboard-bottom {
   flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #409EFF;
+  background: #409eff;
+}
+
+.draw-draw-el-cl-row-top {
+  height: 92%;
+}
+
+.draw-draw-artboard-bottom {
+  height: 8%;
+}
+
+.draw-draw-el-col-left {
+  height: 100%;
+}
+
+.draw-draw-canvas-info {
+  background-color: white;
+  width: 96%;
+  height: 96%;
+  margin: auto;
+  margin-top: 2%;
+  border-radius: 15px;
+}
+
+.draw-draw-el-col-center {
+  height: 100%;
+}
+
+.draw-draw-el-col-right {
+  height: 100%;
 }
 
 .draw-icon-special {
