@@ -156,7 +156,7 @@ export default {
     float: left;
     color: black;
     padding-left: 15px;
-    padding-top: 10px;
+    padding-top: 40px;
 }
 
 .draw-home-play-div {

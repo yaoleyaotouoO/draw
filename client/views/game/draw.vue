@@ -3,7 +3,8 @@
         <canvas v-if="canDraw" ref='canvasDom' width='400' height='300' @touchstart='start' @touchmove='move' @touchend='end'></canvas>
         <canvas v-else ref='canvasDom' width='400' height='300'></canvas>
 
-        <div class="draw-features" v-if="canDraw">
+        <!-- <div class="draw-features" v-if="canDraw"> -->
+            <div class="draw-features">
             <svg class="draw-icon icon" aria-hidden="true" @click="changePenColor">
                 <use xlink:href="#icon-color-filling" :style="penColor"></use>
             </svg>
@@ -21,7 +22,7 @@
                 <use xlink:href="#icon-delete" style="color:#FCFCFC;"></use>
             </svg>
         </div>
-    </div>
+    </div>  
 </template>
 
 <script>
