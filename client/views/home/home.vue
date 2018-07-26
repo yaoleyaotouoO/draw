@@ -139,7 +139,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .draw-round-icon {
     padding-top: 10px;
     width: 80px;

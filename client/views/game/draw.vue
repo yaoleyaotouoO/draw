@@ -1,6 +1,6 @@
 <template>
     <div>
-        <el-row class="draw-draw-el-cl-row-top">
+        <el-row class="draw-draw-el-cl-row-top" :style="{height: canDraw ? '92%' : '100%'}">
             <el-col class="draw-draw-el-col-left" :span="1">
             </el-col>
             <el-col class="draw-draw-el-col-center" :span="22">
@@ -14,8 +14,8 @@
             </el-col>
         </el-row>
 
-        <!-- <div class="draw-draw-artboard-bottom" v-if="canDraw"> -->
-        <div class="draw-draw-artboard-bottom">
+        <div class="draw-draw-artboard-bottom" v-if="canDraw">
+            <!-- <div class="draw-draw-artboard-bottom"> -->
             <svg class="draw-icon icon" aria-hidden="true" @click="changePenColor">
                 <use xlink:href="#icon-color-filling" :style="penColor"></use>
             </svg>
@@ -65,10 +65,6 @@ export default {
     },
     mounted() {
         let canvasDom = this.$refs.canvasDom;
-        let parentDom = canvasDom.parentNode;
-        this.canvasWidth = parentDom.offsetWidth;
-        this.canvasHeight = parentDom.offsetHeight;
-
         let { offsetLeft, offsetTop } = this.getOffset(canvasDom);
         this.offsetLeft = offsetLeft;
         this.offsetTop = offsetTop;
@@ -81,7 +77,17 @@ export default {
         this.penWidth = this.penWidthList[0];
         this.ctx.lineWidth = this.penWidth;
     },
+    updated() {
+        this.getCanvasSize();
+    },
     methods: {
+        // 获取 canvas大小
+        getCanvasSize() {
+            let canvasDom = this.$refs.canvasDom;
+            let parentDom = canvasDom.parentNode;
+            this.canvasWidth = parentDom.offsetWidth;
+            this.canvasHeight = parentDom.offsetHeight;
+        },
         // 获取任意元素的offsetLeft/offsetTop值
         getOffset(obj) {
             var arr = []
@@ -190,7 +196,7 @@ export default {
     computed: {
         ...mapState({
             drawPictureData: state => state.drawPictureData
-        })
+        }),
     }
 }
 </script>
@@ -209,7 +215,7 @@ body {
 }
 
 .draw-draw-el-cl-row-top {
-  height: 92%;
+  /* height: 92%; */
 }
 
 .draw-draw-artboard-bottom {
