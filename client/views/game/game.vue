@@ -1,12 +1,12 @@
 <template>
     <el-container>
         <!-- <el-button type="text" @click="dialogTableVisible = true">打开嵌套表格的 Dialog</el-button>
-        <el-dialog title="收货地址" :visible.sync="dialogTableVisible" width="100%" :close-on-click-modal="false" :close-on-press-escape="false">
-            <el-table :data="gridData">
-                <el-table-column property="date" label="日期" width="300px"></el-table-column>
-                <el-table-column property="name" label="姓名" width="300px"></el-table-column>
-            </el-table>
-        </el-dialog> -->
+                                        <el-dialog title="收货地址" :visible.sync="dialogTableVisible" width="100%" :close-on-click-modal="false" :close-on-press-escape="false">
+                                            <el-table :data="gridData">
+                                                <el-table-column property="date" label="日期" width="300px"></el-table-column>
+                                                <el-table-column property="name" label="姓名" width="300px"></el-table-column>
+                                            </el-table>
+                                        </el-dialog> -->
         <el-header class="draw-game-el-header" height="6%">
             <el-row>
                 <el-col class="draw-game-el-col-left" :span="8">
@@ -76,19 +76,19 @@
         </el-footer>
     </el-container>
 
-    <!-- <el-container>
-            <el-header class="draw-game-el-header" height="30px">
-                <div class="draw-game-header-draw-name">{{canDraw ? '我画：': '提示：'}}{{drawName}}</div>
-                <div class="draw-game-header-game-time">{{gameTime}}</div>
-            </el-header>
-            <el-main class="draw-game-el-main">
-                <draw ref="drawContext" :room-id="roomId" :can-draw="canDraw"></draw>
-                <div v-if="!canDraw" class="game-features">
-                    <input placeholder="输入答案" class="game-input" v-model="drawAnswer" />
-                    <el-button class="game-button" size="normal" type="primary" @click="submitAnswer">提交</el-button>
-                </div>
-            </el-main>
-        </el-container> -->
+<!-- <el-container>
+        <el-header class="draw-game-el-header" height="30px">
+            <div class="draw-game-header-draw-name">{{canDraw ? '我画：': '提示：'}}{{drawName}}</div>
+            <div class="draw-game-header-game-time">{{gameTime}}</div>
+        </el-header>
+        <el-main class="draw-game-el-main">
+            <draw ref="drawContext" :room-id="roomId" :can-draw="canDraw"></draw>
+            <div v-if="!canDraw" class="game-features">
+                <input placeholder="输入答案" class="game-input" v-model="drawAnswer" />
+                <el-button class="game-button" size="normal" type="primary" @click="submitAnswer">提交</el-button>
+            </div>
+        </el-main>
+    </el-container> -->
 </template>
 
 <script>
@@ -96,6 +96,7 @@ import Draw from './draw.vue';
 import api from '../../model/model';
 import { mapState } from 'vuex';
 import defaultProfile from '../../assets/images/profile.jpg';
+import { RoomUserStatusEnum } from '../../common/enums';
 
 export default {
     components: { Draw },
@@ -144,6 +145,10 @@ export default {
                 },
                 type: 'submitAnswer'
             }));
+        },
+        async exitGame() {
+            await api.deleteRoomUserByUserId({ roomId: this.roomId, userId: Number(localStorage.getItem('userId')) });
+            this.$router.push({ name: 'home' });
         }
     },
     watch: {
@@ -182,6 +187,8 @@ export default {
                 });
                 console.log(`result: ${result}`)
                 if (result === "confirm") {
+                    // 游戏结束，返回到room界面, 应该设置用户状态为准备状态
+                    await api.updateRoomUserStatusByUserId({ userId: Number(localStorage.getItem('userId')), roomId: this.roomId, status: RoomUserStatusEnum.Ready })
                     this.$router.push({ name: 'room', params: { roomId: this.roomId } });
                 }
                 console.log("MessageBox result: ", result);
@@ -201,166 +208,164 @@ export default {
 
 <style>
 p {
-  margin: 0;
+    margin: 0;
 }
 
 .draw-game-el-button-exit-game {
-  color: black;
+    color: black;
 }
 
 .draw-game-el-main-el-row {
-  height: 100%;
+    height: 100%;
 }
 
 .draw-game-el-col-submit-answer {
-  text-align: center;
+    text-align: center;
 }
 
 .draw-game-submit-answer {
-  width: 90%;
-  height: 100%;
+    width: 90%;
+    height: 100%;
 }
 
 .draw-game-draw-answer {
-  text-align: left;
-  border: 1px solid #409eff;
-  background-color: transparent;
-  color: #000;
-  display: block;
-  width: 100%;
-  font-size: 18px;
-  height: 100%;
-  outline: 0;
-  position: relative;
+    text-align: left;
+    border: 1px solid #409eff;
+    background-color: transparent;
+    color: #000;
+    display: block;
+    width: 100%;
+    font-size: 18px;
+    height: 100%;
+    outline: 0;
+    position: relative;
 }
 
 .draw-game-user-chat-record {
-  background-color: white;
-  overflow: auto;
-  height: 90%;
-  width: 90%;
-  word-wrap: break-word;
-  border-radius: 15px;
-  border: 1px solid #409eff;
-  margin: auto;
-  margin-top: 10px;
+    background-color: white;
+    overflow: auto;
+    height: 90%;
+    width: 90%;
+    word-wrap: break-word;
+    border-radius: 15px;
+    border: 1px solid #409eff;
+    margin: auto;
+    margin-top: 10px;
 }
 
 .draw-game-user-icon {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
 }
 
 .draw-game-user-info {
-  padding-top: 10px;
-  text-align: center;
+    padding-top: 10px;
+    text-align: center;
 }
 
 .draw-game-user-name {
-  margin-top: 5px;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;
-  width: auto;
-  background-color: #409eff;
-  color: white;
-  /* color: black; */
-  font-size: 10px;
-  border-radius: 15px;
-  text-align: center;
+    margin-top: 5px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    width: auto;
+    background-color: #409eff;
+    color: white;
+    /* color: black; */
+    font-size: 10px;
+    border-radius: 15px;
+    text-align: center;
 }
 
 .draw-game-el-main-bottom {
-  height: 34%;
+    height: 34%;
 }
 
-.draw-game-el-col-option-left {
-}
+.draw-game-el-col-option-left {}
 
 .draw-game-el-col-option-center {
-  height: 100%;
+    height: 100%;
 }
 
-.draw-game-el-col-option-right {
-}
+.draw-game-el-col-option-right {}
 
 .draw-game-el-col-left {
-  padding-left: 20px;
+    padding-left: 20px;
 }
 
 .draw-game-el-col-center {
-  text-align: center;
+    text-align: center;
 }
 
 .draw-game-el-col-right {
-  text-align: right;
+    text-align: right;
 }
 
 .draw-game-draw {
-  /* background-color: white; */
-  height: 100%;
+    /* background-color: white; */
+    height: 100%;
 }
 
 .draw-game-el-main-center {
-  height: 66%;
+    height: 66%;
 }
 
 .draw-game-el-main {
-  padding: 0px;
-  background-color: #87cefa;
-  height: 88%;
+    padding: 0px;
+    background-color: #87cefa;
+    height: 88%;
 }
 
 .draw-game-el-footer {
-  padding: 0px;
-  background-color: white;
+    padding: 0px;
+    background-color: white;
 }
 
 .draw-game-el-header {
-  padding: 0px;
-  background-color: #409eff;
+    padding: 0px;
+    background-color: #409eff;
 }
 
 .draw-game-header-draw-name {
-  color: white;
-  float: left;
+    color: white;
+    float: left;
 }
 
 .draw-game-header-game-time {
-  color: white;
-  float: right;
+    color: white;
+    float: right;
 }
 
 .game-spacing {
-  margin-top: 4px;
-  margin-bottom: 4px;
-  float: left;
+    margin-top: 4px;
+    margin-bottom: 4px;
+    float: left;
 }
 
 .game-features {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .game-input {
-  margin: 5px;
-  text-align: left;
-  border: 1px solid #409eff;
-  background-color: transparent;
-  color: #000;
-  display: block;
-  width: 100%;
-  font-size: 18px;
-  height: 41px;
-  outline: 0;
-  position: relative;
+    margin: 5px;
+    text-align: left;
+    border: 1px solid #409eff;
+    background-color: transparent;
+    color: #000;
+    display: block;
+    width: 100%;
+    font-size: 18px;
+    height: 41px;
+    outline: 0;
+    position: relative;
 }
 
 .game-button {
-  margin: 5px;
-  width: 100px;
+    margin: 5px;
+    width: 100px;
 }
 </style>

@@ -33,7 +33,7 @@
                     <el-col :span="10">
                         <p class="draw-home-card-font-color">创建房间</p>
                         <p class="draw-home-card-font-color">约好友一起来画</p>
-                        <a href="javasrcipt:void(0)" class="draw-home-card-font-color" @click="createRoom">开始创建 ></a>
+                        <a href="javascript:void(0);" class="draw-home-card-font-color" @click="createRoom">开始创建 ></a>
                     </el-col>
                 </el-row>
             </el-card>
@@ -42,7 +42,7 @@
                     <el-col :span="14">
                         <p class="draw-home-card-font-color">自由匹配</p>
                         <p class="draw-home-card-font-color">灵魂画手进阶之路</p>
-                        <a href="javasrcipt:void(0)" class="draw-home-card-font-color">立即开始 ></a>
+                        <a href="javascript:void(0);" class="draw-home-card-font-color">立即开始 ></a>
                     </el-col>
                     <el-col :span="10">
                         <img src="../../assets/images/profile.jpg" class="draw-home-box-card-icon">

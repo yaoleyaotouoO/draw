@@ -37,7 +37,7 @@
 import api from '../../model/model';
 import { mapState } from 'vuex';
 import defaultProfile from '../../assets/images/profile.jpg';
-
+import { RoomUserStatusEnum } from '../../common/enums';
 
 export default {
     data() {
@@ -80,17 +80,27 @@ export default {
     },
     computed: {
         canStartGame() {
-            return this.showUserList.some(x => (x.userId === Number(localStorage.getItem('userId')) && x.seatId === 0));
+            let isHomeowner = this.showUserList.some(x => (x.userId === Number(localStorage.getItem('userId')) && x.seatId === 0));
+            let isAllRead = true;
+            this.showUserList.forEach((x) => {
+                if (x.userId) {
+                    if (x.status !== RoomUserStatusEnum.Ready) {
+                        isAllRead = false;
+                    }
+                }
+            });
+
+            return isHomeowner && isAllRead;
         },
         showUserList() {
-            console.log("this.roomUserList: ", this.roomUserList);
             return [0, 0, 0, 0, 0, 0].map((_, i) => {
                 let data = {
                     seatId: i,
                     userName: this.roomUserList[i] ? this.roomUserList[i].userName : null,
                     userId: this.roomUserList[i] ? this.roomUserList[i].userId : null,
                     profile: this.roomUserList[i] ? (this.roomUserList[i].profile || defaultProfile) : defaultProfile,
-                    readyStatus: i === 0 ? "房主" : (this.roomUserList[i] ? "已准备" : "")
+                    readyStatus: i === 0 ? "房主" : (this.roomUserList[i] ? (this.roomUserList[i].status === RoomUserStatusEnum.Ready ? "已准备" : "未准备") : ""),
+                    status: this.roomUserList[i] ? this.roomUserList[i].status : null
                 }
 
                 return data;
@@ -108,154 +118,154 @@ export default {
 
 <style scoped>
 p {
-  margin: 0;
+    margin: 0;
 }
 
-.draw-room-card >>> .el-card__body {
-  padding: 0px;
+.draw-room-card>>>.el-card__body {
+    padding: 0px;
 }
 
 .draw-room-padding {
-  position: absolute;
-  z-index: -1;
-  width: 100%;
-  height: 20%;
-  left: 0px;
-  top: 0px;
-  background-color: #409eff;
+    position: absolute;
+    z-index: -1;
+    width: 100%;
+    height: 20%;
+    left: 0px;
+    top: 0px;
+    background-color: #409eff;
 }
 
 .draw-room-card {
-  position: relative;
-  margin: 20 20 20 20;
-  border: 0;
-  margin-bottom: 0px;
+    position: relative;
+    margin: 20 20 20 20;
+    border: 0;
+    margin-bottom: 0px;
 }
 
 .draw-room-card-photo {
-  width: 100%;
-  height: 200px;
+    width: 100%;
+    height: 200px;
 }
 
 .draw-room-name {
-  margin: 10px;
-  float: left;
+    margin: 10px;
+    float: left;
 }
 
 .draw-room-main {
-  padding: 0px;
+    padding: 0px;
 }
 
 .draw-room-prompt {
-  margin: 10px;
-  text-align: center;
+    margin: 10px;
+    text-align: center;
 }
 
 .draw-room-user-info {
-  text-align: center;
+    text-align: center;
 }
 
 .draw-room-user-icon {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
 }
 
 .draw-room-user-name {
-  margin-top: 5px;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;
-  width: 40px;
-  background: #409eff;
-  font-size: 10px;
-  border-radius: 15px;
-  color: white;
+    margin-top: 5px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    width: 40px;
+    background: #409eff;
+    font-size: 10px;
+    border-radius: 15px;
+    color: white;
 }
 
 .draw-room-user-status-name {
-  margin-bottom: 5px;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;
-  width: 40px;
-  background: #409eff;
-  font-size: 10px;
-  color: white;
-  border-radius: 15px;
+    margin-bottom: 5px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    width: 40px;
+    background: #409eff;
+    font-size: 10px;
+    color: white;
+    border-radius: 15px;
 }
 
 .draw-room-user-no-status {
-  padding-top: 16px;
-  background-color: white;
+    padding-top: 16px;
+    background-color: white;
 }
 
 .draw-room-button-row {
-  margin-top: 20px;
-  padding: 0 20 0 20;
+    margin-top: 20px;
+    padding: 0 20 0 20;
 }
 
 .draw-room-button-row-ready {
-  height: 40px;
-  width: 95%;
+    height: 40px;
+    width: 95%;
 }
 
 .draw-room-button-row-list-button {
-  height: 40px;
-  width: 95%;
-  float: right;
+    height: 40px;
+    width: 95%;
+    float: right;
 }
 
 .draw-room-button-out {
-  float: right;
-  margin: 7px;
+    float: right;
+    margin: 7px;
 }
 
 .draw-room-el-row {
-  padding-top: 10px;
-  padding-left: 20px;
-  padding-right: 20px;
+    padding-top: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
 }
 
 .room-margin-top {
-  margin-top: 50px;
+    margin-top: 50px;
 }
 
 .room-list {
-  padding-left: 20px;
-  font-size: 12px;
-  font-weight: bolder;
-  overflow: hidden;
+    padding-left: 20px;
+    font-size: 12px;
+    font-weight: bolder;
+    overflow: hidden;
 }
 
 .room-list li {
-  margin: 10px;
-  list-style-image: none;
-  list-style-type: none;
-  background-color: #999999;
-  border-right-width: 0px;
-  border-right-style: solid;
-  border-right-color: #000000;
-  float: left;
-  width: 70px;
-  height: 45px;
-  box-shadow: 0px 5px 5px #000000;
+    margin: 10px;
+    list-style-image: none;
+    list-style-type: none;
+    background-color: #999999;
+    border-right-width: 0px;
+    border-right-style: solid;
+    border-right-color: #000000;
+    float: left;
+    width: 70px;
+    height: 45px;
+    box-shadow: 0px 5px 5px #000000;
 }
 
 .room-list li a {
-  color: #ffffff;
-  text-decoration: none;
-  margin: 0px;
-  display: block;
-  text-align: center;
-  line-height: 45px;
+    color: #ffffff;
+    text-decoration: none;
+    margin: 0px;
+    display: block;
+    text-align: center;
+    line-height: 45px;
 }
 
 .room-list li a:hover {
-  background-color: #0099cc;
+    background-color: #0099cc;
 }
 
 .room-startGame-button {
-  margin-top: 20px;
+    margin-top: 20px;
 }
 </style>

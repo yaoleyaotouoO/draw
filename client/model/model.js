@@ -70,5 +70,11 @@ export default {
     },
     findRoom(roomName) {
         return handleRequest(request.get('/api/findRoom', { params: { roomName } }));
+    },
+    deleteRoomUserByUserId({ roomId, userId }) {
+        return handleRequest(request.post('/api/deleteRoomUserByUserId', { roomId, userId }));
+    },
+    updateRoomUserStatusByUserId({ roomId, userId, status }) {
+        return handleRequest(request.post('/api/updateRoomUserStatusByUserId', { roomId, userId, status }));
     }
 }
