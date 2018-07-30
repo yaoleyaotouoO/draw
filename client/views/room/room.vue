@@ -82,7 +82,7 @@ export default {
         canStartGame() {
             let isHomeowner = this.showUserList.some(x => (x.userId === Number(localStorage.getItem('userId')) && x.seatId === 0));
             let isAllRead = true;
-            for (let item in this.showUserList) {
+            for (let item of this.showUserList) {
                 if (item.userId) {
                     if (item.status !== RoomUserStatusEnum.Ready && item.seatId !== 0) {
                         isAllRead = false;

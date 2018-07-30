@@ -36,7 +36,7 @@
                         </div>
                     </el-col>
                     <el-col class="draw-game-el-col-option-center" :span="14">
-                        <div class="draw-game-user-chat-record">
+                        <div ref="chatMessageDom" class="draw-game-user-chat-record">
                             <p v-for="(value, index) in chatMessageList" :key="index">{{value}}</p>
                         </div>
                     </el-col>
@@ -146,6 +146,11 @@ export default {
                     this.chatMessageList.shift();
                 }
                 this.chatMessageList.push(newVal.chatMessage);
+                let chatMessageDom = this.$refs.chatMessageDom;
+                console.log("chatMessageDom: ", chatMessageDom);
+                console.log("chatMessageDom: ", chatMessageDom.scrollTop);
+                console.log("chatMessageDom: ", chatMessageDom.scrollHeight);
+                chatMessageDom.scrollTop = chatMessageDom.scrollHeight + chatMessageDom.scrollTop;
 
                 this.$store.commit('setChatMessage', { showChatMessage: false });
             }
@@ -181,173 +186,176 @@ export default {
 
 <style>
 p {
-    margin: 0;
+  margin: 0;
 }
 
 .el-badge__content.is-fixed {
-    right: 15px;
+  right: 15px;
 }
 
 .draw-game-el-button-exit-game {
-    color: black;
+  color: black;
 }
 
 .draw-game-el-main-el-row {
-    height: 100%;
+  height: 100%;
 }
 
 .draw-game-el-col-submit-answer {
-    text-align: center;
+  text-align: center;
 }
 
 .draw-game-submit-answer {
-    width: 90%;
-    height: 100%;
+  width: 90%;
+  height: 100%;
 }
 
 .draw-game-draw-answer {
-    text-align: left;
-    border: 1px solid #409eff;
-    background-color: transparent;
-    color: #000;
-    display: block;
-    width: 100%;
-    font-size: 18px;
-    height: 100%;
-    outline: 0;
-    position: relative;
+  text-align: left;
+  border: 1px solid #409eff;
+  background-color: transparent;
+  color: #000;
+  display: block;
+  width: 100%;
+  font-size: 18px;
+  height: 100%;
+  outline: 0;
+  position: relative;
 }
 
 .draw-game-user-chat-record {
-    background-color: white;
-    overflow: auto;
-    height: 90%;
-    width: 90%;
-    word-wrap: break-word;
-    border-radius: 15px;
-    border: 1px solid #409eff;
-    margin: auto;
-    margin-top: 10px;
+  background-color: white;
+  overflow: auto;
+  height: 90%;
+  width: 90%;
+  word-wrap: break-word;
+  border-radius: 15px;
+  border: 1px solid #409eff;
+  margin: auto;
+  margin-top: 10px;
 }
 
 .draw-game-user-icon {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
 }
 
 .draw-game-user-info {
-    padding-top: 10px;
-    text-align: center;
+  padding-top: 10px;
+  text-align: center;
 }
 
 .draw-game-user-name {
-    margin-top: 5px;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    white-space: nowrap;
-    width: auto;
-    background-color: #409eff;
-    color: white;
-    /* color: black; */
-    font-size: 10px;
-    border-radius: 15px;
-    text-align: center;
+  margin-top: 5px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  width: auto;
+  background-color: #409eff;
+  color: white;
+  /* color: black; */
+  font-size: 10px;
+  border-radius: 15px;
+  text-align: center;
 }
 
 .draw-game-el-main-bottom {
-    height: 34%;
+  height: 34%;
 }
 
-.draw-game-el-col-option-left {}
+.draw-game-el-col-option-left {
+  height: 100%;
+}
 
 .draw-game-el-col-option-center {
-    height: 100%;
+  height: 100%;
 }
 
-.draw-game-el-col-option-right {}
+.draw-game-el-col-option-right {
+}
 
 .draw-game-el-col-left {
-    padding-left: 20px;
+  padding-left: 20px;
 }
 
 .draw-game-el-col-center {
-    text-align: center;
+  text-align: center;
 }
 
 .draw-game-el-col-right {
-    text-align: right;
+  text-align: right;
 }
 
 .draw-game-draw {
-    /* background-color: white; */
-    height: 100%;
+  /* background-color: white; */
+  height: 100%;
 }
 
 .draw-game-el-main-center {
-    height: 66%;
+  height: 66%;
 }
 
 .draw-game-el-main {
-    padding: 0px;
-    background-color: #87cefa;
-    height: 88%;
+  padding: 0px;
+  background-color: #87cefa;
+  height: 88%;
 }
 
 .draw-game-el-footer {
-    padding: 0px;
-    background-color: white;
+  padding: 0px;
+  background-color: white;
 }
 
 .draw-game-el-footer-can-draw {
-    padding: 0px;
-    background-color: #87cefa;
+  padding: 0px;
+  background-color: #87cefa;
 }
 
 .draw-game-el-header {
-    padding: 0px;
-    background-color: #409eff;
+  padding: 0px;
+  background-color: #409eff;
 }
 
 .draw-game-header-draw-name {
-    color: white;
-    float: left;
+  color: white;
+  float: left;
 }
 
 .draw-game-header-game-time {
-    color: white;
-    float: right;
+  color: white;
+  float: right;
 }
 
 .game-spacing {
-    margin-top: 4px;
-    margin-bottom: 4px;
-    float: left;
+  margin-top: 4px;
+  margin-bottom: 4px;
+  float: left;
 }
 
 .game-features {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .game-input {
-    margin: 5px;
-    text-align: left;
-    border: 1px solid #409eff;
-    background-color: transparent;
-    color: #000;
-    display: block;
-    width: 100%;
-    font-size: 18px;
-    height: 41px;
-    outline: 0;
-    position: relative;
+  margin: 5px;
+  text-align: left;
+  border: 1px solid #409eff;
+  background-color: transparent;
+  color: #000;
+  display: block;
+  width: 100%;
+  font-size: 18px;
+  height: 41px;
+  outline: 0;
+  position: relative;
 }
 
 .game-button {
-    margin: 5px;
-    width: 100px;
+  margin: 5px;
+  width: 100px;
 }
 </style>
