@@ -64,6 +64,7 @@ export default {
         }
     },
     mounted() {
+        this.getCanvasSize();
         let canvasDom = this.$refs.canvasDom;
         let { offsetLeft, offsetTop } = this.getOffset(canvasDom);
         this.offsetLeft = offsetLeft;
@@ -102,7 +103,6 @@ export default {
             return { offsetLeft: offsetL, offsetTop: offsetT }
         },
         draw(data) {
-            console.log("draw data: ", data);
             switch (data.type) {
                 case 'start':
                     this.ctx.beginPath();
@@ -163,7 +163,6 @@ export default {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消'
             });
-            console.log(`result: ${result}`)
             if (result !== 'confirm') return;
 
             this.draw({ type: 'clear' });
@@ -187,7 +186,6 @@ export default {
     },
     watch: {
         drawPictureData(newVal, oldVal) {
-            //    console.log(`new: ${JSON.stringify(newVal)}  old: ${JSON.stringify(oldVal)}`)
             if (this.canDraw) return;
 
             this.draw(newVal);

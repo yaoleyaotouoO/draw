@@ -29,7 +29,11 @@
             <div class="draw-game-el-main-bottom">
                 <el-row class="draw-game-el-main-el-row">
                     <el-col class="draw-game-el-col-option-left" :span="4">
-                        <div class="draw-game-user-info">
+                        <div class="draw-game-user-info" v-for="item in roomUserList.slice(0, 3)" :key="item.userId">
+                            <img :src="defaultProfile" class="draw-game-user-icon">
+                            <p class="draw-game-user-name">{{item.userName}}</p>
+                        </div>
+                        <!-- <div class="draw-game-user-info">
                             <img :src="defaultProfile" class="draw-game-user-icon">
                             <p class="draw-game-user-name">摇了摇头oO</p>
                         </div>
@@ -40,15 +44,19 @@
                         <div class="draw-game-user-info">
                             <img :src="defaultProfile" class="draw-game-user-icon">
                             <p class="draw-game-user-name">摇了摇头oO</p>
-                        </div>
+                        </div> -->
                     </el-col>
                     <el-col class="draw-game-el-col-option-center" :span="16">
                         <div class="draw-game-user-chat-record">
-                            11111111111111111111111111111111111111111222222222222222222222233333333333333333333444444444444444444444444444444444444555555555555555555555555555555555555555566666666666666666666666666666666666666666666666667777777777777777777777777777771111111111111111111111111111111111111111122222222222222222222223333333333333333333344444444444444444444444444444444444455555555555555555555555555555555555555556666666666666666666666666666666666666666666666666777777777777777777777777777777
+                            <p v-for="value in chatMessageList" :key="value">{{value}}</p>
                         </div>
                     </el-col>
                     <el-col class="draw-game-el-col-option-right" :span="4">
-                        <div class="draw-game-user-info">
+                        <div class="draw-game-user-info" v-for="item in roomUserList.slice(3, 6)" :key="item.userId">
+                            <img :src="defaultProfile" class="draw-game-user-icon">
+                            <p class="draw-game-user-name">{{item.userName}}</p>
+                        </div>
+                        <!-- <div class="draw-game-user-info">
                             <img :src="defaultProfile" class="draw-game-user-icon">
                             <p class="draw-game-user-name">摇了摇头oO</p>
                         </div>
@@ -59,7 +67,7 @@
                         <div class="draw-game-user-info">
                             <img :src="defaultProfile" class="draw-game-user-icon">
                             <p class="draw-game-user-name">摇了摇头oO</p>
-                        </div>
+                        </div> -->
                     </el-col>
                 </el-row>
             </div>
@@ -76,7 +84,7 @@
         </el-footer>
     </el-container>
 
-<!-- <el-container>
+    <!-- <el-container>
         <el-header class="draw-game-el-header" height="30px">
             <div class="draw-game-header-draw-name">{{canDraw ? '我画：': '提示：'}}{{drawName}}</div>
             <div class="draw-game-header-game-time">{{gameTime}}</div>
@@ -126,7 +134,8 @@ export default {
             canDraw: false,
             drawAnswer: '',
             roomUserList: [],
-            defaultProfile: defaultProfile
+            defaultProfile: defaultProfile,
+            chatMessageList: []
         }
     },
     async mounted() {
@@ -134,7 +143,6 @@ export default {
     },
     methods: {
         submitAnswer() {
-            console.log("drawAnswer: ", this.drawAnswer);
             // 提交答案，然后由服务器返回结果并监听显示数据
             this.$webSocket.send(JSON.stringify({
                 data: {
@@ -157,11 +165,10 @@ export default {
             this.drawName = newVal.topicName || newVal.topicPrompt;
             this.gameTime = newVal.gameTime;
             this.roomUserList = newVal.roomUserList;
-
+            const oneRoundTime = 100;
             // 判断游戏时间, 清空画布
-            if (newVal.gameTime === 10) {
+            if (newVal.gameTime === oneRoundTime) {
                 this.$refs.drawContext.draw({ type: 'clear' });
-                console.log("gameInfo newVal: ", newVal);
             }
         },
         showAnswerInfo(newVal, oldVal) {
@@ -174,6 +181,17 @@ export default {
                     }
                 });
                 this.$store.commit('setShowAnswerInfo', { showAnswer: false });
+            }
+        },
+        showChatMessage(newVal, oldVal) {
+            if (newVal.showChatMessage) {
+                // 插入到消息中
+                if (this.chatMessageList.length > 20) {
+                    this.chatMessageList.shift();
+                }
+                this.chatMessageList.push(newVal.chatMessage);
+
+                this.$store.commit('setChatMessage', { showChatMessage: false });
             }
         },
         async gameOverData(newVal, oldVal) {
@@ -200,6 +218,7 @@ export default {
         ...mapState({
             gameInfo: state => state.gameInfo,
             showAnswerInfo: state => state.showAnswerInfo,
+            showChatMessage: state => state.showChatMessage,
             gameOverData: state => state.gameOverData
         })
     }
@@ -208,164 +227,166 @@ export default {
 
 <style>
 p {
-    margin: 0;
+  margin: 0;
 }
 
 .draw-game-el-button-exit-game {
-    color: black;
+  color: black;
 }
 
 .draw-game-el-main-el-row {
-    height: 100%;
+  height: 100%;
 }
 
 .draw-game-el-col-submit-answer {
-    text-align: center;
+  text-align: center;
 }
 
 .draw-game-submit-answer {
-    width: 90%;
-    height: 100%;
+  width: 90%;
+  height: 100%;
 }
 
 .draw-game-draw-answer {
-    text-align: left;
-    border: 1px solid #409eff;
-    background-color: transparent;
-    color: #000;
-    display: block;
-    width: 100%;
-    font-size: 18px;
-    height: 100%;
-    outline: 0;
-    position: relative;
+  text-align: left;
+  border: 1px solid #409eff;
+  background-color: transparent;
+  color: #000;
+  display: block;
+  width: 100%;
+  font-size: 18px;
+  height: 100%;
+  outline: 0;
+  position: relative;
 }
 
 .draw-game-user-chat-record {
-    background-color: white;
-    overflow: auto;
-    height: 90%;
-    width: 90%;
-    word-wrap: break-word;
-    border-radius: 15px;
-    border: 1px solid #409eff;
-    margin: auto;
-    margin-top: 10px;
+  background-color: white;
+  overflow: auto;
+  height: 90%;
+  width: 90%;
+  word-wrap: break-word;
+  border-radius: 15px;
+  border: 1px solid #409eff;
+  margin: auto;
+  margin-top: 10px;
 }
 
 .draw-game-user-icon {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
 }
 
 .draw-game-user-info {
-    padding-top: 10px;
-    text-align: center;
+  padding-top: 10px;
+  text-align: center;
 }
 
 .draw-game-user-name {
-    margin-top: 5px;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    white-space: nowrap;
-    width: auto;
-    background-color: #409eff;
-    color: white;
-    /* color: black; */
-    font-size: 10px;
-    border-radius: 15px;
-    text-align: center;
+  margin-top: 5px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  width: auto;
+  background-color: #409eff;
+  color: white;
+  /* color: black; */
+  font-size: 10px;
+  border-radius: 15px;
+  text-align: center;
 }
 
 .draw-game-el-main-bottom {
-    height: 34%;
+  height: 34%;
 }
 
-.draw-game-el-col-option-left {}
+.draw-game-el-col-option-left {
+}
 
 .draw-game-el-col-option-center {
-    height: 100%;
+  height: 100%;
 }
 
-.draw-game-el-col-option-right {}
+.draw-game-el-col-option-right {
+}
 
 .draw-game-el-col-left {
-    padding-left: 20px;
+  padding-left: 20px;
 }
 
 .draw-game-el-col-center {
-    text-align: center;
+  text-align: center;
 }
 
 .draw-game-el-col-right {
-    text-align: right;
+  text-align: right;
 }
 
 .draw-game-draw {
-    /* background-color: white; */
-    height: 100%;
+  /* background-color: white; */
+  height: 100%;
 }
 
 .draw-game-el-main-center {
-    height: 66%;
+  height: 66%;
 }
 
 .draw-game-el-main {
-    padding: 0px;
-    background-color: #87cefa;
-    height: 88%;
+  padding: 0px;
+  background-color: #87cefa;
+  height: 88%;
 }
 
 .draw-game-el-footer {
-    padding: 0px;
-    background-color: white;
+  padding: 0px;
+  background-color: white;
 }
 
 .draw-game-el-header {
-    padding: 0px;
-    background-color: #409eff;
+  padding: 0px;
+  background-color: #409eff;
 }
 
 .draw-game-header-draw-name {
-    color: white;
-    float: left;
+  color: white;
+  float: left;
 }
 
 .draw-game-header-game-time {
-    color: white;
-    float: right;
+  color: white;
+  float: right;
 }
 
 .game-spacing {
-    margin-top: 4px;
-    margin-bottom: 4px;
-    float: left;
+  margin-top: 4px;
+  margin-bottom: 4px;
+  float: left;
 }
 
 .game-features {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .game-input {
-    margin: 5px;
-    text-align: left;
-    border: 1px solid #409eff;
-    background-color: transparent;
-    color: #000;
-    display: block;
-    width: 100%;
-    font-size: 18px;
-    height: 41px;
-    outline: 0;
-    position: relative;
+  margin: 5px;
+  text-align: left;
+  border: 1px solid #409eff;
+  background-color: transparent;
+  color: #000;
+  display: block;
+  width: 100%;
+  font-size: 18px;
+  height: 41px;
+  outline: 0;
+  position: relative;
 }
 
 .game-button {
-    margin: 5px;
-    width: 100px;
+  margin: 5px;
+  width: 100px;
 }
 </style>

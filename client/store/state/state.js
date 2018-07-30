@@ -4,5 +4,6 @@ export default {
     drawPictureData: {},
     gameInfo: {},
     showAnswerInfo: {},
-    gameOverData: {}
+    gameOverData: {},
+    showChatMessage: {}
 }

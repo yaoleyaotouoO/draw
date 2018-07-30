@@ -18,11 +18,10 @@ export default (router, store) => {
     }
 
     webSocket.onmessage = (event) => {
-        // console.log("webSocket onmessage: ", event.data);
         let messageData = JSON.parse(event.data);
         let roomId = localStorage.getItem('roomId') && localStorage.getItem('roomId').toString();
         let userId = localStorage.getItem('userId') && Number(localStorage.getItem('userId'));
-        let dataRoomId = messageData.data.roomId.toString();
+        let dataRoomId = messageData.data.roomId && messageData.data.roomId.toString();
         if (dataRoomId !== roomId) {
             return;
         }
@@ -51,6 +50,9 @@ export default (router, store) => {
                 break;
             case 'deleteRoomUser':
                 store.commit('deleteRoomUserByUserId', messageData.data.userId);
+                break;
+            case 'showChatMessage':
+                store.commit('setChatMessage', messageData.data);
                 break;
             default:
                 console.warn('webSocket onmessage not type!');

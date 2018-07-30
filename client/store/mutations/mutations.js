@@ -30,5 +30,8 @@ export default {
     },
     setGameOverData(state, data) {
         state.gameOverData = Object.assign({}, state.gameOverData, data);
+    },
+    setChatMessage(state, data) {
+        state.showChatMessage = Object.assign({}, state.showChatMessage, data);
     }
 }
