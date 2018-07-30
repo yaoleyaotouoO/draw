@@ -1,12 +1,11 @@
 <template>
     <el-container>
-        <!-- <el-button type="text" @click="dialogTableVisible = true">打开嵌套表格的 Dialog</el-button>
-                                        <el-dialog title="收货地址" :visible.sync="dialogTableVisible" width="100%" :close-on-click-modal="false" :close-on-press-escape="false">
-                                            <el-table :data="gridData">
-                                                <el-table-column property="date" label="日期" width="300px"></el-table-column>
-                                                <el-table-column property="name" label="姓名" width="300px"></el-table-column>
-                                            </el-table>
-                                        </el-dialog> -->
+        <el-dialog title="分数统计" :visible.sync="showScoreTable" width="100%" :close-on-click-modal="false" :close-on-press-escape="false" @close="scoreTableClose">
+            <el-table :data="gameOverScoreList">
+                <el-table-column property="userName" label="用户名" width="300px"></el-table-column>
+                <el-table-column property="score" label="总分" width="300px"></el-table-column>
+            </el-table>
+        </el-dialog>
         <el-header class="draw-game-el-header" height="6%">
             <el-row>
                 <el-col class="draw-game-el-col-left" :span="8">
@@ -18,7 +17,7 @@
                     <p>{{drawName}}</p>
                 </el-col>
                 <el-col class="draw-game-el-col-right" :span="8">
-                    <el-button class="draw-game-el-button-exit-game" size="normal" type="primary">退出游戏</el-button>
+                    <el-button class="draw-game-el-button-exit-game" size="normal" type="primary" @click="exitGame">退出游戏</el-button>
                 </el-col>
             </el-row>
         </el-header>
@@ -28,75 +27,42 @@
             </div>
             <div class="draw-game-el-main-bottom">
                 <el-row class="draw-game-el-main-el-row">
-                    <el-col class="draw-game-el-col-option-left" :span="4">
+                    <el-col class="draw-game-el-col-option-left" :span="5">
                         <div class="draw-game-user-info" v-for="item in roomUserList.slice(0, 3)" :key="item.userId">
-                            <img :src="defaultProfile" class="draw-game-user-icon">
+                            <el-badge :value="item.score ? item.score : 0" :max="99" class="item">
+                                <img :src="defaultProfile" class="draw-game-user-icon">
+                            </el-badge>
                             <p class="draw-game-user-name">{{item.userName}}</p>
                         </div>
-                        <!-- <div class="draw-game-user-info">
-                            <img :src="defaultProfile" class="draw-game-user-icon">
-                            <p class="draw-game-user-name">摇了摇头oO</p>
-                        </div>
-                        <div class="draw-game-user-info">
-                            <img :src="defaultProfile" class="draw-game-user-icon">
-                            <p class="draw-game-user-name">摇了摇头oO</p>
-                        </div>
-                        <div class="draw-game-user-info">
-                            <img :src="defaultProfile" class="draw-game-user-icon">
-                            <p class="draw-game-user-name">摇了摇头oO</p>
-                        </div> -->
                     </el-col>
-                    <el-col class="draw-game-el-col-option-center" :span="16">
+                    <el-col class="draw-game-el-col-option-center" :span="14">
                         <div class="draw-game-user-chat-record">
-                            <p v-for="value in chatMessageList" :key="value">{{value}}</p>
+                            <p v-for="(value, index) in chatMessageList" :key="index">{{value}}</p>
                         </div>
                     </el-col>
-                    <el-col class="draw-game-el-col-option-right" :span="4">
+                    <el-col class="draw-game-el-col-option-right" :span="5">
                         <div class="draw-game-user-info" v-for="item in roomUserList.slice(3, 6)" :key="item.userId">
-                            <img :src="defaultProfile" class="draw-game-user-icon">
+                            <el-badge :value="item.score ? item.score : 0" :max="99" class="item">
+                                <img :src="defaultProfile" class="draw-game-user-icon">
+                            </el-badge>
                             <p class="draw-game-user-name">{{item.userName}}</p>
                         </div>
-                        <!-- <div class="draw-game-user-info">
-                            <img :src="defaultProfile" class="draw-game-user-icon">
-                            <p class="draw-game-user-name">摇了摇头oO</p>
-                        </div>
-                        <div class="draw-game-user-info">
-                            <img :src="defaultProfile" class="draw-game-user-icon">
-                            <p class="draw-game-user-name">摇了摇头oO</p>
-                        </div>
-                        <div class="draw-game-user-info">
-                            <img :src="defaultProfile" class="draw-game-user-icon">
-                            <p class="draw-game-user-name">摇了摇头oO</p>
-                        </div> -->
                     </el-col>
                 </el-row>
             </div>
         </el-main>
-        <el-footer class="draw-game-el-footer" height="6%">
+        <el-footer v-if="canDraw" class="draw-game-el-footer-can-draw" height="6%"></el-footer>
+        <el-footer v-else class="draw-game-el-footer" height="6%">
             <el-row>
                 <el-col :span="18">
                     <input placeholder="输入答案" class="draw-game-draw-answer" v-model="drawAnswer" />
                 </el-col>
                 <el-col class="draw-game-el-col-submit-answer" :span="6">
-                    <el-button class="draw-game-submit-answer" size="normal" type="primary" @click="submitAnswer">提交</el-button>
+                    <el-button class="draw-game-submit-answer" size="normal" type="primary" @click="submitAnswer" @keyup.enter="submitAnswer">提交</el-button>
                 </el-col>
             </el-row>
         </el-footer>
     </el-container>
-
-    <!-- <el-container>
-        <el-header class="draw-game-el-header" height="30px">
-            <div class="draw-game-header-draw-name">{{canDraw ? '我画：': '提示：'}}{{drawName}}</div>
-            <div class="draw-game-header-game-time">{{gameTime}}</div>
-        </el-header>
-        <el-main class="draw-game-el-main">
-            <draw ref="drawContext" :room-id="roomId" :can-draw="canDraw"></draw>
-            <div v-if="!canDraw" class="game-features">
-                <input placeholder="输入答案" class="game-input" v-model="drawAnswer" />
-                <el-button class="game-button" size="normal" type="primary" @click="submitAnswer">提交</el-button>
-            </div>
-        </el-main>
-    </el-container> -->
 </template>
 
 <script>
@@ -110,24 +76,7 @@ export default {
     components: { Draw },
     data() {
         return {
-            gridData: [{
-                date: '2016-05-02',
-                name: '王小虎',
-                address: '上海市普陀区金沙江路 1518 弄'
-            }, {
-                date: '2016-05-04',
-                name: '王小虎',
-                address: '上海市普陀区金沙江路 1518 弄'
-            }, {
-                date: '2016-05-01',
-                name: '王小虎',
-                address: '上海市普陀区金沙江路 1518 弄'
-            }, {
-                date: '2016-05-03',
-                name: '王小虎',
-                address: '上海市普陀区金沙江路 1518 弄'
-            }],
-            dialogTableVisible: false,
+            showScoreTable: false,
             drawName: '',
             gameTime: 0,
             roomId: null,
@@ -138,7 +87,7 @@ export default {
             chatMessageList: []
         }
     },
-    async mounted() {
+    mounted() {
         this.roomId = this.$route.params.roomId;
     },
     methods: {
@@ -153,10 +102,17 @@ export default {
                 },
                 type: 'submitAnswer'
             }));
+
+            this.drawAnswer = '';
         },
         async exitGame() {
             await api.deleteRoomUserByUserId({ roomId: this.roomId, userId: Number(localStorage.getItem('userId')) });
             this.$router.push({ name: 'home' });
+        },
+        async scoreTableClose() {
+            // 游戏结束，返回到room界面, 应该设置用户状态为准备状态
+            await api.updateRoomUserStatusByUserId({ userId: Number(localStorage.getItem('userId')), roomId: this.roomId, status: RoomUserStatusEnum.Ready })
+            this.$router.push({ name: 'room', params: { roomId: this.roomId } });
         }
     },
     watch: {
@@ -165,7 +121,7 @@ export default {
             this.drawName = newVal.topicName || newVal.topicPrompt;
             this.gameTime = newVal.gameTime;
             this.roomUserList = newVal.roomUserList;
-            const oneRoundTime = 100;
+            const oneRoundTime = 20;
             // 判断游戏时间, 清空画布
             if (newVal.gameTime === oneRoundTime) {
                 this.$refs.drawContext.draw({ type: 'clear' });
@@ -194,24 +150,21 @@ export default {
                 this.$store.commit('setChatMessage', { showChatMessage: false });
             }
         },
-        async gameOverData(newVal, oldVal) {
-            if (newVal.showScore) {
-                // 显示所有人的分数
-                console.log("gameOverData newVal: ", newVal);
-                this.$refs.drawContext.draw({ type: 'clear' });
-
-                let result = await this.$alert('test', '分数统计', {
-                    confirmButtonText: '确定'
-                });
-                console.log(`result: ${result}`)
-                if (result === "confirm") {
-                    // 游戏结束，返回到room界面, 应该设置用户状态为准备状态
-                    await api.updateRoomUserStatusByUserId({ userId: Number(localStorage.getItem('userId')), roomId: this.roomId, status: RoomUserStatusEnum.Ready })
-                    this.$router.push({ name: 'room', params: { roomId: this.roomId } });
+        roomUserScoreList(newVal, oldVal) {
+            // 接收到新的分数
+            console.log("roomUserScoreList: ", newVal);
+            this.roomUserList = this.roomUserList.map(x => {
+                if (x.userId) {
+                    x.score = newVal.filter(y => y.userId === x.userId).shift().score;
                 }
-                console.log("MessageBox result: ", result);
-                this.$store.commit('setGameOverData', { showScore: false });
-            }
+                return x;
+            });
+        },
+        async gameOverScoreList(newVal, oldVal) {
+            // 显示所有人的分数
+            console.log("gameOverData newVal: ", newVal);
+            this.$refs.drawContext.draw({ type: 'clear' });
+            this.showScoreTable = true;
         }
     },
     computed: {
@@ -219,7 +172,8 @@ export default {
             gameInfo: state => state.gameInfo,
             showAnswerInfo: state => state.showAnswerInfo,
             showChatMessage: state => state.showChatMessage,
-            gameOverData: state => state.gameOverData
+            gameOverScoreList: state => state.gameOverScoreList,
+            roomUserScoreList: state => state.roomUserScoreList
         })
     }
 }
@@ -227,166 +181,173 @@ export default {
 
 <style>
 p {
-  margin: 0;
+    margin: 0;
+}
+
+.el-badge__content.is-fixed {
+    right: 15px;
 }
 
 .draw-game-el-button-exit-game {
-  color: black;
+    color: black;
 }
 
 .draw-game-el-main-el-row {
-  height: 100%;
+    height: 100%;
 }
 
 .draw-game-el-col-submit-answer {
-  text-align: center;
+    text-align: center;
 }
 
 .draw-game-submit-answer {
-  width: 90%;
-  height: 100%;
+    width: 90%;
+    height: 100%;
 }
 
 .draw-game-draw-answer {
-  text-align: left;
-  border: 1px solid #409eff;
-  background-color: transparent;
-  color: #000;
-  display: block;
-  width: 100%;
-  font-size: 18px;
-  height: 100%;
-  outline: 0;
-  position: relative;
+    text-align: left;
+    border: 1px solid #409eff;
+    background-color: transparent;
+    color: #000;
+    display: block;
+    width: 100%;
+    font-size: 18px;
+    height: 100%;
+    outline: 0;
+    position: relative;
 }
 
 .draw-game-user-chat-record {
-  background-color: white;
-  overflow: auto;
-  height: 90%;
-  width: 90%;
-  word-wrap: break-word;
-  border-radius: 15px;
-  border: 1px solid #409eff;
-  margin: auto;
-  margin-top: 10px;
+    background-color: white;
+    overflow: auto;
+    height: 90%;
+    width: 90%;
+    word-wrap: break-word;
+    border-radius: 15px;
+    border: 1px solid #409eff;
+    margin: auto;
+    margin-top: 10px;
 }
 
 .draw-game-user-icon {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
 }
 
 .draw-game-user-info {
-  padding-top: 10px;
-  text-align: center;
+    padding-top: 10px;
+    text-align: center;
 }
 
 .draw-game-user-name {
-  margin-top: 5px;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;
-  width: auto;
-  background-color: #409eff;
-  color: white;
-  /* color: black; */
-  font-size: 10px;
-  border-radius: 15px;
-  text-align: center;
+    margin-top: 5px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    width: auto;
+    background-color: #409eff;
+    color: white;
+    /* color: black; */
+    font-size: 10px;
+    border-radius: 15px;
+    text-align: center;
 }
 
 .draw-game-el-main-bottom {
-  height: 34%;
+    height: 34%;
 }
 
-.draw-game-el-col-option-left {
-}
+.draw-game-el-col-option-left {}
 
 .draw-game-el-col-option-center {
-  height: 100%;
+    height: 100%;
 }
 
-.draw-game-el-col-option-right {
-}
+.draw-game-el-col-option-right {}
 
 .draw-game-el-col-left {
-  padding-left: 20px;
+    padding-left: 20px;
 }
 
 .draw-game-el-col-center {
-  text-align: center;
+    text-align: center;
 }
 
 .draw-game-el-col-right {
-  text-align: right;
+    text-align: right;
 }
 
 .draw-game-draw {
-  /* background-color: white; */
-  height: 100%;
+    /* background-color: white; */
+    height: 100%;
 }
 
 .draw-game-el-main-center {
-  height: 66%;
+    height: 66%;
 }
 
 .draw-game-el-main {
-  padding: 0px;
-  background-color: #87cefa;
-  height: 88%;
+    padding: 0px;
+    background-color: #87cefa;
+    height: 88%;
 }
 
 .draw-game-el-footer {
-  padding: 0px;
-  background-color: white;
+    padding: 0px;
+    background-color: white;
+}
+
+.draw-game-el-footer-can-draw {
+    padding: 0px;
+    background-color: #87cefa;
 }
 
 .draw-game-el-header {
-  padding: 0px;
-  background-color: #409eff;
+    padding: 0px;
+    background-color: #409eff;
 }
 
 .draw-game-header-draw-name {
-  color: white;
-  float: left;
+    color: white;
+    float: left;
 }
 
 .draw-game-header-game-time {
-  color: white;
-  float: right;
+    color: white;
+    float: right;
 }
 
 .game-spacing {
-  margin-top: 4px;
-  margin-bottom: 4px;
-  float: left;
+    margin-top: 4px;
+    margin-bottom: 4px;
+    float: left;
 }
 
 .game-features {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .game-input {
-  margin: 5px;
-  text-align: left;
-  border: 1px solid #409eff;
-  background-color: transparent;
-  color: #000;
-  display: block;
-  width: 100%;
-  font-size: 18px;
-  height: 41px;
-  outline: 0;
-  position: relative;
+    margin: 5px;
+    text-align: left;
+    border: 1px solid #409eff;
+    background-color: transparent;
+    color: #000;
+    display: block;
+    width: 100%;
+    font-size: 18px;
+    height: 41px;
+    outline: 0;
+    position: relative;
 }
 
 .game-button {
-  margin: 5px;
-  width: 100px;
+    margin: 5px;
+    width: 100px;
 }
 </style>

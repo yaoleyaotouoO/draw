@@ -4,6 +4,7 @@ export default {
     drawPictureData: {},
     gameInfo: {},
     showAnswerInfo: {},
-    gameOverData: {},
-    showChatMessage: {}
+    gameOverScoreList: {},
+    showChatMessage: {},
+    roomUserScoreList: []
 }

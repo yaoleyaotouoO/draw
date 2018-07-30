@@ -15,7 +15,6 @@
         </el-row>
 
         <div class="draw-draw-artboard-bottom" v-if="canDraw">
-            <!-- <div class="draw-draw-artboard-bottom"> -->
             <svg class="draw-icon icon" aria-hidden="true" @click="changePenColor">
                 <use xlink:href="#icon-color-filling" :style="penColor"></use>
             </svg>

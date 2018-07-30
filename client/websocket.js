@@ -46,7 +46,7 @@ export default (router, store) => {
                 store.commit('setShowAnswerInfo', messageData.data);
                 break;
             case 'gameOver':
-                store.commit('setGameOverData', messageData.data);
+                store.commit('setGameOverData', messageData.data.gameOverScoreList);
                 break;
             case 'deleteRoomUser':
                 store.commit('deleteRoomUserByUserId', messageData.data.userId);
@@ -54,8 +54,10 @@ export default (router, store) => {
             case 'showChatMessage':
                 store.commit('setChatMessage', messageData.data);
                 break;
+            case 'showRoomUserScore':
+                store.commit('setRoomUserScoreList', messageData.data.roomUserScoreList);
             default:
-                console.warn('webSocket onmessage not type!');
+                console.warn('webSocket onmessage not type!: ', messageData);
         }
     }
 

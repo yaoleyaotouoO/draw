@@ -29,9 +29,12 @@ export default {
         state.showAnswerInfo = Object.assign({}, state.showAnswerInfo, data);
     },
     setGameOverData(state, data) {
-        state.gameOverData = Object.assign({}, state.gameOverData, data);
+        state.gameOverScoreList = data;
     },
     setChatMessage(state, data) {
         state.showChatMessage = Object.assign({}, state.showChatMessage, data);
+    },
+    setRoomUserScoreList(state, data) {
+        state.roomUserScoreList = data;
     }
 }
