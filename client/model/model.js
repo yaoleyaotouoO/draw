@@ -4,7 +4,7 @@ const isDev = process.env.NODE_ENV === 'development';
 
 const request = axios.create({
     // 192.168.0.105
-    baseURL: isDev ? 'http://localhost:3333' : 'http://draw.yaoleyaotou.xin:3333',
+    baseURL: isDev ? 'http://localhost:3333' : 'http://draw.yaoleyaotou.xin',
     headers: {
         "Authorization": `Bearer 11111`
     }
