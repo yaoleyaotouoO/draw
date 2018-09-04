@@ -9,7 +9,7 @@ module.exports = {
     output: {
         filename: '[name].js',
         path: path.resolve(__dirname, '../dist'),
-        publicPath: isDev ? '/' : './' // 确保文件资源能够正确的访问
+        publicPath: isDev ? '/' : '/' // 确保文件资源能够正确的访问
     },
     module: {
         rules: [
