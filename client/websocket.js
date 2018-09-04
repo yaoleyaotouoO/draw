@@ -2,7 +2,7 @@ const isDev = process.env.NODE_ENV === 'development';
 
 export default (router, store) => {
     //  const webSocket = new WebSocket('ws://192.168.0.103:3333/ws/');
-    let webSocket = new WebSocket(isDev ? 'ws://localhost:3333/ws/' : 'ws://draw.yaoleyaotou.xin:3333/ws/');
+    let webSocket = new WebSocket(isDev ? 'ws://localhost:3333/ws/' : 'wss://draw.yaoleyaotou.xin:3333/ws/');
     // let webSocket = new WebSocket('ws://localhost:3333/ws/');
 
     let reconnect = () => {
