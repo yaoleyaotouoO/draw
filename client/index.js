@@ -23,7 +23,7 @@ router.beforeEach((to, from, next) => {
         Vue.prototype.$webSocket = createWebSocket(router, store);
     }
 
-    if ((!localStorage.getItem('userName') || !localStorage.getItem('userId')) && to.fullPath !== '/login') {
+    if ((!localStorage.getItem('userName') || !localStorage.getItem('userId')) && to.fullPath !== '/login' && to.fullPath !== '/register') {
         next({ path: '/login' })
     } else if (to.fullPath === '/') {
         next({ path: '/home' })
